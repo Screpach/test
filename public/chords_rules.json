@@ -1,0 +1,2002 @@
+{
+  "id": "mode-dependent-harmonic-transition-grammar",
+  "name": "Mode-Dependent Harmonic Transition Grammar",
+  "description": "A scientific musicological progression table for major and minor tonal systems. Roman numerals are treated as scale-degree chord locations, not as case-sensitive indicators of chord quality.",
+  "notationPolicy": {
+    "caseSensitiveRomanNumerals": false,
+    "capitalizationMeaning": "None. I, II, III, IV, V, VI, VII are abstract scale-degree chord labels only.",
+    "modeDeterminesQuality": true,
+    "qualityEncoding": "Chord quality must be supplied by mode or by explicit suffixes such as dim, dim7, +, 7, M7, m7, or inversion labels.",
+    "importantDistinctions": [
+      {
+        "symbol": "VII6",
+        "meaning": "Leading-tone-function chord in first inversion",
+        "mustNotBeConfusedWith": "bVII"
+      },
+      {
+        "symbol": "bVII",
+        "meaning": "Lowered seventh-degree chord; subtonic or modal/Aeolian function",
+        "mustNotBeConfusedWith": "VII6"
+      },
+      {
+        "symbol": "III+6",
+        "meaning": "First-inversion augmented mediant sonority in strict harmonic minor",
+        "mustNotBeConfusedWith": "III from natural/common minor"
+      },
+      {
+        "symbol": "V64",
+        "meaning": "Dominant-function second-inversion sonority in this CHORD encoding system",
+        "note": "In conventional Roman-numeral theory, cadential six-four is often analyzed as I64-V-I or CAD64-V-I."
+      }
+    ]
+  },
+  "profiles": [
+    {
+      "id": "common-practice-satb",
+      "name": "Common Practice SATB",
+      "enabledRuleIds": [],
+      "severityOverrides": {}
+    },
+    {
+      "id": "nineteenth-century-expanded",
+      "name": "Nineteenth-Century Expanded",
+      "enabledRuleIds": [],
+      "severityOverrides": {}
+    },
+    {
+      "id": "strict-counterpoint",
+      "name": "Strict Counterpoint",
+      "enabledRuleIds": [],
+      "severityOverrides": {}
+    }
+  ],
+  "voiceRanges": {
+    "S": {
+      "label": "Soprano",
+      "low": "C4",
+      "high": "G5"
+    },
+    "A": {
+      "label": "Alto",
+      "low": "G3",
+      "high": "D5"
+    },
+    "T": {
+      "label": "Tenor",
+      "low": "C3",
+      "high": "G4"
+    },
+    "B": {
+      "label": "Bass",
+      "low": "E2",
+      "high": "C4"
+    }
+  },
+  "functionAreas": {
+    "tonicArea": [
+      "I",
+      "III",
+      "VI"
+    ],
+    "predominantArea": [
+      "IV",
+      "II",
+      "II6",
+      "bII6",
+      "+6"
+    ],
+    "dominantArea": [
+      "V",
+      "V7",
+      "VII6",
+      "VII7"
+    ],
+    "tonicResolutionArea": [
+      "I",
+      "I6"
+    ],
+    "modalBorrowedArea": [
+      "bVII",
+      "bVI",
+      "IVminor",
+      "bII6"
+    ],
+    "appliedDominantArea": [
+      "V/X",
+      "VII/X"
+    ]
+  },
+  "globalFunctionalFlow": {
+    "abstract": [
+      "TONIC",
+      "TONIC_EXPANSION",
+      "PREDOMINANT",
+      "DOMINANT",
+      "TONIC"
+    ],
+    "degreeModel": [
+      "I",
+      "III",
+      "VI",
+      "IV_OR_II6",
+      "V_OR_VII6",
+      "I"
+    ],
+    "importantChains": [
+      [
+        "III",
+        "VI",
+        "II",
+        "V",
+        "I"
+      ],
+      [
+        "III",
+        "VI",
+        "IV",
+        "II",
+        "V",
+        "I"
+      ],
+      [
+        "I",
+        "VI",
+        "IV",
+        "V",
+        "I"
+      ],
+      [
+        "I",
+        "IV",
+        "V",
+        "I"
+      ]
+    ]
+  },
+  "modes": {
+    "major": {
+      "id": "major",
+      "name": "Major",
+      "description": "Major-key diatonic and expanded tonal progression grammar. Roman numerals are uppercase because the CHORD system is case-insensitive.",
+      "traditionalDiatonicQualities": {
+        "I": "major tonic",
+        "II": "minor supertonic",
+        "III": "minor mediant",
+        "IV": "major subdominant",
+        "V": "major dominant",
+        "VI": "minor submediant",
+        "VII": "diminished leading-tone chord"
+      },
+      "directTransitions": {
+        "I": [
+          "IV",
+          "II6",
+          "V",
+          "VI",
+          "I6",
+          "IV6",
+          "V64",
+          "VII6"
+        ],
+        "II": [
+          "V",
+          "VII6",
+          "IV",
+          "I",
+          "VI",
+          "III"
+        ],
+        "II6": [
+          "V"
+        ],
+        "III": [
+          "VI",
+          "IV",
+          "II",
+          "V",
+          "I"
+        ],
+        "IV": [
+          "V",
+          "I",
+          "II",
+          "VII6",
+          "VI"
+        ],
+        "IV6": [
+          "V"
+        ],
+        "V": [
+          "I",
+          "VI",
+          "IV",
+          "II",
+          "VII6",
+          "III"
+        ],
+        "VI": [
+          "II",
+          "II6",
+          "IV",
+          "V",
+          "III",
+          "I",
+          "VII6"
+        ],
+        "VII6": [
+          "I",
+          "I6",
+          "V"
+        ]
+      },
+      "pathGrammar": {
+        "I": [
+          [
+            "I",
+            "IV",
+            "V"
+          ],
+          [
+            "I",
+            "IV",
+            "I6"
+          ],
+          [
+            "I",
+            "IV",
+            "VI"
+          ],
+          [
+            "I",
+            "IV6",
+            "V"
+          ],
+          [
+            "I",
+            "II6",
+            "V"
+          ],
+          [
+            "I",
+            "I6",
+            "IV"
+          ],
+          [
+            "I",
+            "V",
+            "I"
+          ],
+          [
+            "I",
+            "V",
+            "VI"
+          ],
+          [
+            "I",
+            "V",
+            "I6"
+          ],
+          [
+            "I",
+            "VI",
+            "V"
+          ],
+          [
+            "I",
+            "VI",
+            "IV"
+          ],
+          [
+            "I",
+            "VI",
+            "II6"
+          ],
+          [
+            "I",
+            "V64",
+            "I6"
+          ],
+          [
+            "I",
+            "VII6",
+            "I"
+          ],
+          [
+            "I",
+            "VII6",
+            "I6"
+          ]
+        ],
+        "II": [
+          [
+            "II",
+            "V",
+            "I"
+          ],
+          [
+            "II",
+            "V",
+            "VI"
+          ],
+          [
+            "II",
+            "V",
+            "III"
+          ],
+          [
+            "II",
+            "VII6",
+            "I"
+          ],
+          [
+            "II",
+            "VII6",
+            "VI"
+          ],
+          [
+            "II",
+            "IV",
+            "V"
+          ],
+          [
+            "II",
+            "IV",
+            "I"
+          ],
+          [
+            "II",
+            "IV",
+            "VI"
+          ],
+          [
+            "II",
+            "IV",
+            "III"
+          ],
+          [
+            "II",
+            "I",
+            "V"
+          ],
+          [
+            "II",
+            "I",
+            "IV"
+          ],
+          [
+            "II",
+            "I",
+            "VI"
+          ],
+          [
+            "II",
+            "I",
+            "V65"
+          ],
+          [
+            "II",
+            "III",
+            "IV"
+          ],
+          [
+            "II",
+            "III",
+            "VI"
+          ],
+          [
+            "II",
+            "III",
+            "I"
+          ],
+          [
+            "II",
+            "VI",
+            "V"
+          ],
+          [
+            "II",
+            "VI",
+            "IV"
+          ],
+          [
+            "II",
+            "VI",
+            "III"
+          ]
+        ],
+        "III": [
+          [
+            "III",
+            "VI",
+            "II"
+          ],
+          [
+            "III",
+            "VI",
+            "IV"
+          ],
+          [
+            "III",
+            "VI",
+            "V"
+          ],
+          [
+            "III",
+            "IV",
+            "V"
+          ],
+          [
+            "III",
+            "IV",
+            "I"
+          ],
+          [
+            "III",
+            "IV",
+            "II"
+          ],
+          [
+            "III",
+            "IV",
+            "VI"
+          ],
+          [
+            "III",
+            "II",
+            "V"
+          ],
+          [
+            "III",
+            "II",
+            "VI"
+          ],
+          [
+            "III",
+            "V",
+            "I"
+          ],
+          [
+            "III",
+            "V",
+            "VI"
+          ],
+          [
+            "III",
+            "V",
+            "II"
+          ],
+          [
+            "III",
+            "I",
+            "V"
+          ],
+          [
+            "III",
+            "I",
+            "II"
+          ],
+          [
+            "III",
+            "I",
+            "IV"
+          ],
+          [
+            "III",
+            "I",
+            "VI"
+          ]
+        ],
+        "IV": [
+          [
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "IV",
+            "I"
+          ],
+          [
+            "IV",
+            "I",
+            "V"
+          ],
+          [
+            "IV",
+            "II",
+            "V"
+          ],
+          [
+            "IV",
+            "II",
+            "VI"
+          ],
+          [
+            "IV",
+            "VI",
+            "V"
+          ],
+          [
+            "IV",
+            "VI",
+            "II"
+          ],
+          [
+            "IV",
+            "VII6",
+            "I"
+          ]
+        ],
+        "V": [
+          [
+            "V",
+            "I"
+          ],
+          [
+            "V",
+            "I",
+            "V"
+          ],
+          [
+            "V",
+            "I",
+            "II"
+          ],
+          [
+            "V",
+            "I",
+            "IV"
+          ],
+          [
+            "V",
+            "I",
+            "VI"
+          ],
+          [
+            "V",
+            "VI"
+          ],
+          [
+            "V",
+            "VI",
+            "I"
+          ],
+          [
+            "V",
+            "VI",
+            "II"
+          ],
+          [
+            "V",
+            "VI",
+            "III"
+          ],
+          [
+            "V",
+            "VI",
+            "IV"
+          ],
+          [
+            "V",
+            "VI",
+            "V"
+          ],
+          [
+            "V",
+            "IV",
+            "I"
+          ],
+          [
+            "V",
+            "IV",
+            "V"
+          ],
+          [
+            "V",
+            "IV",
+            "VI"
+          ],
+          [
+            "V",
+            "II",
+            "III"
+          ],
+          [
+            "V",
+            "II",
+            "IV"
+          ],
+          [
+            "V",
+            "II",
+            "VI"
+          ],
+          [
+            "V",
+            "III",
+            "IV"
+          ],
+          [
+            "V",
+            "VII6",
+            "I"
+          ]
+        ],
+        "VI": [
+          [
+            "VI",
+            "II",
+            "V"
+          ],
+          [
+            "VI",
+            "II6",
+            "V"
+          ],
+          [
+            "VI",
+            "IV",
+            "V"
+          ],
+          [
+            "VI",
+            "IV",
+            "I"
+          ],
+          [
+            "VI",
+            "IV",
+            "II"
+          ],
+          [
+            "VI",
+            "IV",
+            "III"
+          ],
+          [
+            "VI",
+            "III",
+            "I"
+          ],
+          [
+            "VI",
+            "III",
+            "IV"
+          ],
+          [
+            "VI",
+            "III",
+            "V"
+          ],
+          [
+            "VI",
+            "III",
+            "VI"
+          ],
+          [
+            "VI",
+            "V",
+            "I"
+          ],
+          [
+            "VI",
+            "V",
+            "III"
+          ],
+          [
+            "VI",
+            "V",
+            "VI"
+          ],
+          [
+            "VI",
+            "VII6",
+            "I"
+          ]
+        ],
+        "VII6": [
+          [
+            "VII6",
+            "I"
+          ],
+          [
+            "VII6",
+            "I6"
+          ],
+          [
+            "VII6",
+            "V"
+          ],
+          [
+            "VII6",
+            "V7"
+          ],
+          [
+            "VII6",
+            "III"
+          ],
+          [
+            "VII6",
+            "VI"
+          ]
+        ]
+      },
+      "rankedProgressions": {
+        "rank1_structuralCadential": [
+          [
+            "I",
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "I",
+            "II6",
+            "V",
+            "I"
+          ],
+          [
+            "I",
+            "VI",
+            "II",
+            "V",
+            "I"
+          ],
+          [
+            "III",
+            "VI",
+            "II",
+            "V",
+            "I"
+          ],
+          [
+            "III",
+            "VI",
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "II",
+            "V",
+            "I"
+          ],
+          [
+            "VII6",
+            "I"
+          ],
+          [
+            "V",
+            "I"
+          ]
+        ],
+        "rank2_commonTonalExpansion": [
+          [
+            "I",
+            "VI",
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "I",
+            "V",
+            "VI"
+          ],
+          [
+            "V",
+            "VI",
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "IV",
+            "I"
+          ],
+          [
+            "IV",
+            "II",
+            "V",
+            "I"
+          ],
+          [
+            "VI",
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "VI",
+            "II6",
+            "V",
+            "I"
+          ]
+        ],
+        "rank3_sequentialConnective": [
+          [
+            "II",
+            "I"
+          ],
+          [
+            "II",
+            "III"
+          ],
+          [
+            "III",
+            "I"
+          ],
+          [
+            "III",
+            "V"
+          ],
+          [
+            "V",
+            "IV"
+          ],
+          [
+            "V",
+            "II"
+          ],
+          [
+            "VI",
+            "III"
+          ],
+          [
+            "VII6",
+            "V"
+          ]
+        ]
+      },
+      "chromaticAndAppliedAdditions": {
+        "appliedDominants": {
+          "V/III": [
+            "III"
+          ],
+          "V/VI": [
+            "VI"
+          ],
+          "V/II": [
+            "II"
+          ],
+          "V/V": [
+            "V"
+          ],
+          "V/IV": [
+            "IV"
+          ]
+        },
+        "appliedLeadingToneChords": {
+          "VII/III": [
+            "III"
+          ],
+          "VII/VI": [
+            "VI"
+          ],
+          "VII/II": [
+            "II"
+          ],
+          "VII/V": [
+            "V"
+          ],
+          "VII/IV": [
+            "IV"
+          ]
+        },
+        "chromaticPredominants": {
+          "bII6": [
+            "V"
+          ],
+          "+6": [
+            "V"
+          ]
+        },
+        "modalMixture": {
+          "IVminor": [
+            "I"
+          ],
+          "bVI": [
+            "bVII"
+          ],
+          "bVII": [
+            "I"
+          ],
+          "bVII7": [
+            "I"
+          ]
+        }
+      }
+    },
+    "minor": {
+      "id": "minor-composite-tonal",
+      "name": "Minor, Composite Tonal",
+      "description": "Common-practice minor grammar combining harmonic-minor dominant function with natural-minor and modal/Aeolian resources.",
+      "strictHarmonicMinorScale": [
+        "1",
+        "2",
+        "b3",
+        "4",
+        "5",
+        "b6",
+        "7"
+      ],
+      "traditionalStrictHarmonicMinorQualities": {
+        "I": "minor tonic",
+        "II": "diminished supertonic",
+        "III+": "augmented mediant",
+        "IV": "minor subdominant",
+        "V": "major dominant",
+        "VI": "major submediant",
+        "VII": "diminished leading-tone chord"
+      },
+      "minorSeventhDegreeDistinction": {
+        "VII6": {
+          "meaning": "leading-tone-function chord",
+          "resolutions": [
+            "I",
+            "I6"
+          ]
+        },
+        "bVII": {
+          "meaning": "subtonic or Aeolian/modal chord",
+          "resolutions": [
+            "III",
+            "I",
+            "IV"
+          ]
+        }
+      },
+      "directTransitionsStrictHarmonic": {
+        "I": [
+          "IV",
+          "II6",
+          "V",
+          "VI",
+          "I6",
+          "IV6",
+          "V64",
+          "VII6"
+        ],
+        "II6": [
+          "V",
+          "I",
+          "I6",
+          "VI",
+          "III+6",
+          "VII6"
+        ],
+        "III+6": [
+          "VI",
+          "I",
+          "V",
+          "VII6"
+        ],
+        "IV": [
+          "V",
+          "I",
+          "II6",
+          "VI",
+          "VII6"
+        ],
+        "IV6": [
+          "V"
+        ],
+        "V": [
+          "I",
+          "VI",
+          "IV",
+          "II6",
+          "VII6",
+          "III+6"
+        ],
+        "VI": [
+          "II6",
+          "IV",
+          "V",
+          "I",
+          "III+6",
+          "VII6"
+        ],
+        "VII6": [
+          "I",
+          "I6",
+          "V"
+        ]
+      },
+      "directTransitionsCommonExpanded": {
+        "bVII": [
+          "III",
+          "I",
+          "IV"
+        ],
+        "III": [
+          "VI"
+        ],
+        "VI": [
+          "IV",
+          "II6",
+          "V",
+          "I",
+          "bVII"
+        ],
+        "IV": [
+          "bVII",
+          "II6",
+          "V",
+          "I"
+        ],
+        "II6": [
+          "V"
+        ],
+        "V": [
+          "I",
+          "VI"
+        ],
+        "VII6": [
+          "I",
+          "I6"
+        ]
+      },
+      "importantMinorChains": [
+        [
+          "IV",
+          "bVII",
+          "III",
+          "VI",
+          "II6",
+          "V",
+          "I"
+        ],
+        [
+          "III",
+          "VI",
+          "II6",
+          "V",
+          "I"
+        ],
+        [
+          "VI",
+          "IV",
+          "V",
+          "I"
+        ],
+        [
+          "bVII",
+          "I"
+        ],
+        [
+          "VI",
+          "bVII",
+          "I"
+        ]
+      ],
+      "pathGrammar": {
+        "I": [
+          [
+            "I",
+            "IV",
+            "V"
+          ],
+          [
+            "I",
+            "IV",
+            "I6"
+          ],
+          [
+            "I",
+            "IV",
+            "VI"
+          ],
+          [
+            "I",
+            "IV6",
+            "V"
+          ],
+          [
+            "I",
+            "II6",
+            "V"
+          ],
+          [
+            "I",
+            "I6",
+            "IV"
+          ],
+          [
+            "I",
+            "V",
+            "I"
+          ],
+          [
+            "I",
+            "V",
+            "VI"
+          ],
+          [
+            "I",
+            "V",
+            "I6"
+          ],
+          [
+            "I",
+            "VI",
+            "V"
+          ],
+          [
+            "I",
+            "VI",
+            "IV"
+          ],
+          [
+            "I",
+            "VI",
+            "II6"
+          ],
+          [
+            "I",
+            "V64",
+            "I6"
+          ],
+          [
+            "I",
+            "VII6",
+            "I"
+          ],
+          [
+            "I",
+            "VII6",
+            "I6"
+          ]
+        ],
+        "II6": [
+          [
+            "II6",
+            "V",
+            "I"
+          ],
+          [
+            "II6",
+            "V",
+            "VI"
+          ],
+          [
+            "II6",
+            "VI",
+            "V"
+          ],
+          [
+            "II6",
+            "VI",
+            "I"
+          ],
+          [
+            "II6",
+            "I",
+            "V"
+          ],
+          [
+            "II6",
+            "I6",
+            "V"
+          ],
+          [
+            "II6",
+            "I6",
+            "VI"
+          ],
+          [
+            "II6",
+            "I6",
+            "VII6"
+          ],
+          [
+            "II6",
+            "III+6",
+            "VII6",
+            "I"
+          ]
+        ],
+        "III_OR_III+6": [
+          [
+            "III",
+            "VI"
+          ],
+          [
+            "III",
+            "VI",
+            "II6"
+          ],
+          [
+            "III",
+            "VI",
+            "IV"
+          ],
+          [
+            "III+6",
+            "VI"
+          ],
+          [
+            "III+6",
+            "I"
+          ],
+          [
+            "III+6",
+            "V"
+          ],
+          [
+            "III+6",
+            "VII6"
+          ]
+        ],
+        "IV": [
+          [
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "IV",
+            "V",
+            "VI"
+          ],
+          [
+            "IV",
+            "I",
+            "V"
+          ],
+          [
+            "IV",
+            "I",
+            "VI"
+          ],
+          [
+            "IV",
+            "II6",
+            "V"
+          ],
+          [
+            "IV",
+            "II6",
+            "I"
+          ],
+          [
+            "IV",
+            "II6",
+            "I6"
+          ],
+          [
+            "IV",
+            "VI",
+            "V"
+          ],
+          [
+            "IV",
+            "VI",
+            "I"
+          ],
+          [
+            "IV",
+            "VII6",
+            "I"
+          ],
+          [
+            "IV",
+            "bVII",
+            "III"
+          ]
+        ],
+        "V": [
+          [
+            "V",
+            "I"
+          ],
+          [
+            "V",
+            "VI"
+          ],
+          [
+            "V",
+            "II6",
+            "V"
+          ],
+          [
+            "V",
+            "II6",
+            "I6"
+          ],
+          [
+            "V",
+            "II6",
+            "III+6",
+            "VII6",
+            "I"
+          ],
+          [
+            "V",
+            "III+6",
+            "VI"
+          ],
+          [
+            "V",
+            "IV",
+            "V"
+          ],
+          [
+            "V",
+            "IV",
+            "I"
+          ],
+          [
+            "V",
+            "IV",
+            "VI"
+          ],
+          [
+            "V",
+            "IV",
+            "VII6"
+          ],
+          [
+            "V",
+            "VII6",
+            "I"
+          ]
+        ],
+        "VI": [
+          [
+            "VI",
+            "II6",
+            "V"
+          ],
+          [
+            "VI",
+            "IV",
+            "V"
+          ],
+          [
+            "VI",
+            "IV",
+            "I"
+          ],
+          [
+            "VI",
+            "IV",
+            "I6"
+          ],
+          [
+            "VI",
+            "IV",
+            "VII6"
+          ],
+          [
+            "VI",
+            "I",
+            "V"
+          ],
+          [
+            "VI",
+            "I",
+            "IV"
+          ],
+          [
+            "VI",
+            "V",
+            "I"
+          ],
+          [
+            "VI",
+            "VII6",
+            "I"
+          ],
+          [
+            "VI",
+            "VII6",
+            "I6"
+          ],
+          [
+            "VI",
+            "III+6",
+            "VI"
+          ],
+          [
+            "VI",
+            "bVII",
+            "I"
+          ]
+        ],
+        "bVII": [
+          [
+            "bVII",
+            "III"
+          ],
+          [
+            "bVII",
+            "I"
+          ],
+          [
+            "bVII",
+            "IV"
+          ]
+        ],
+        "VII6": [
+          [
+            "VII6",
+            "I"
+          ],
+          [
+            "VII6",
+            "I6"
+          ],
+          [
+            "VII6",
+            "V"
+          ]
+        ]
+      },
+      "rankedProgressions": {
+        "rank1_structuralCadential": [
+          [
+            "II6",
+            "V",
+            "I"
+          ],
+          [
+            "IV",
+            "V",
+            "I"
+          ],
+          [
+            "V",
+            "I"
+          ],
+          [
+            "VII6",
+            "I"
+          ],
+          [
+            "III",
+            "VI",
+            "II6",
+            "V",
+            "I"
+          ],
+          [
+            "VI",
+            "II6",
+            "V",
+            "I"
+          ]
+        ],
+        "rank2_commonTonalExpansion": [
+          [
+            "I",
+            "IV"
+          ],
+          [
+            "I",
+            "VI"
+          ],
+          [
+            "I",
+            "V"
+          ],
+          [
+            "IV",
+            "I"
+          ],
+          [
+            "V",
+            "VI"
+          ],
+          [
+            "VI",
+            "IV"
+          ],
+          [
+            "III",
+            "VI"
+          ],
+          [
+            "IV",
+            "II6"
+          ]
+        ],
+        "rank3_sequentialConnective": [
+          [
+            "III",
+            "VI"
+          ],
+          [
+            "VI",
+            "IV"
+          ],
+          [
+            "IV",
+            "bVII"
+          ],
+          [
+            "bVII",
+            "III"
+          ],
+          [
+            "V",
+            "IV"
+          ],
+          [
+            "VII6",
+            "V"
+          ]
+        ],
+        "rank4_chromaticOptional": [
+          [
+            "V/X",
+            "X"
+          ],
+          [
+            "VII/X",
+            "X"
+          ],
+          [
+            "bII6",
+            "V"
+          ],
+          [
+            "+6",
+            "V"
+          ],
+          [
+            "bVI",
+            "bVII",
+            "I"
+          ],
+          [
+            "bVII",
+            "I"
+          ],
+          [
+            "IVminor",
+            "I"
+          ],
+          [
+            "V",
+            "I",
+            "PICARDY"
+          ]
+        ]
+      },
+      "chromaticAndAppliedAdditions": {
+        "appliedDominants": {
+          "V/IV": [
+            "IV"
+          ],
+          "V/bVII": [
+            "bVII"
+          ],
+          "V/III": [
+            "III"
+          ],
+          "V/VI": [
+            "VI"
+          ],
+          "V/V": [
+            "V"
+          ]
+        },
+        "appliedLeadingToneChords": {
+          "VII/IV": [
+            "IV"
+          ],
+          "VII/bVII": [
+            "bVII"
+          ],
+          "VII/III": [
+            "III"
+          ],
+          "VII/VI": [
+            "VI"
+          ],
+          "VII/V": [
+            "V"
+          ]
+        },
+        "chromaticPredominants": {
+          "bII6": [
+            "V"
+          ],
+          "+6": [
+            "V"
+          ]
+        },
+        "picardy": {
+          "V": [
+            "I_MAJOR"
+          ],
+          "encodedAs": [
+            "V",
+            "I",
+            "PICARDY"
+          ]
+        }
+      }
+    }
+  },
+  "cadences": [
+    {
+      "id": "authentic-cadence",
+      "name": "Authentic Cadence",
+      "abbreviation": "AC",
+      "patterns": [
+        [
+          "V",
+          "I"
+        ],
+        [
+          "V7",
+          "I"
+        ]
+      ],
+      "function": [
+        "DOMINANT",
+        "TONIC"
+      ],
+      "strength": "structural"
+    },
+    {
+      "id": "leading-tone-cadence",
+      "name": "Leading-Tone Cadence",
+      "abbreviation": "LTC",
+      "patterns": [
+        [
+          "VII6",
+          "I"
+        ],
+        [
+          "VII6",
+          "I6"
+        ]
+      ],
+      "function": [
+        "DOMINANT",
+        "TONIC"
+      ],
+      "strength": "structural"
+    },
+    {
+      "id": "plagal-cadence",
+      "name": "Plagal Cadence",
+      "abbreviation": "PC",
+      "patterns": [
+        [
+          "IV",
+          "I"
+        ],
+        [
+          "IVminor",
+          "I"
+        ]
+      ],
+      "function": [
+        "PREDOMINANT",
+        "TONIC"
+      ],
+      "strength": "secondary"
+    },
+    {
+      "id": "deceptive-cadence",
+      "name": "Deceptive Cadence",
+      "abbreviation": "DC",
+      "patterns": [
+        [
+          "V",
+          "VI"
+        ]
+      ],
+      "function": [
+        "DOMINANT",
+        "TONIC_SUBSTITUTE"
+      ],
+      "strength": "common"
+    },
+    {
+      "id": "interrupted-cadence",
+      "name": "Interrupted Cadence",
+      "abbreviation": "IC",
+      "patterns": [
+        [
+          "V",
+          "VI"
+        ]
+      ],
+      "function": [
+        "DOMINANT",
+        "INTERRUPTED_RESOLUTION"
+      ],
+      "strength": "common"
+    },
+    {
+      "id": "aeolian-cadence",
+      "name": "Aeolian Cadence",
+      "abbreviation": "AEC",
+      "patterns": [
+        [
+          "bVII",
+          "I"
+        ],
+        [
+          "VI",
+          "bVII",
+          "I"
+        ]
+      ],
+      "function": [
+        "MODAL_SUBTONIC",
+        "TONIC"
+      ],
+      "mode": "minor-common-expanded",
+      "strength": "modal"
+    },
+    {
+      "id": "picardy-cadence",
+      "name": "Picardy Cadence",
+      "abbreviation": "PIC",
+      "patterns": [
+        [
+          "V",
+          "I_MAJOR"
+        ]
+      ],
+      "encodedAs": [
+        "V",
+        "I",
+        "PICARDY"
+      ],
+      "mode": "minor",
+      "strength": "final-cadential"
+    }
+  ],
+  "chords": [
+    {
+      "id": "I",
+      "label": "I",
+      "functionAreas": [
+        "TONIC",
+        "TONIC_RESOLUTION"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "I6",
+      "label": "I6",
+      "functionAreas": [
+        "TONIC",
+        "TONIC_RESOLUTION"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "II",
+      "label": "II",
+      "functionAreas": [
+        "PREDOMINANT",
+        "SEQUENTIAL"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "II6",
+      "label": "II6",
+      "functionAreas": [
+        "PREDOMINANT"
+      ],
+      "caseSensitive": false,
+      "modeNotes": {
+        "major": "Supertonic first inversion",
+        "minor": "Preferred supertonic sonority; usually diminished in first inversion in common-practice minor"
+      }
+    },
+    {
+      "id": "III",
+      "label": "III",
+      "functionAreas": [
+        "TONIC_EXPANSION",
+        "SEQUENTIAL"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "III+6",
+      "label": "III+6",
+      "functionAreas": [
+        "STRICT_HARMONIC_MINOR",
+        "SEQUENTIAL"
+      ],
+      "caseSensitive": false,
+      "modeNotes": {
+        "minor": "Augmented mediant in first inversion in strict harmonic minor"
+      }
+    },
+    {
+      "id": "IV",
+      "label": "IV",
+      "functionAreas": [
+        "PREDOMINANT",
+        "PLAGAL"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "IV6",
+      "label": "IV6",
+      "functionAreas": [
+        "PREDOMINANT"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "V",
+      "label": "V",
+      "functionAreas": [
+        "DOMINANT"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "V7",
+      "label": "V7",
+      "functionAreas": [
+        "DOMINANT"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "V64",
+      "label": "V64",
+      "functionAreas": [
+        "DOMINANT_PROLONGATION",
+        "CADENTIAL_64_ENCODING"
+      ],
+      "caseSensitive": false,
+      "definitionRequired": true
+    },
+    {
+      "id": "VI",
+      "label": "VI",
+      "functionAreas": [
+        "TONIC_SUBSTITUTE",
+        "SEQUENTIAL",
+        "DECEPTIVE_TARGET"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "VII6",
+      "label": "VII6",
+      "functionAreas": [
+        "LEADING_TONE",
+        "DOMINANT"
+      ],
+      "caseSensitive": false,
+      "mustNotBeConfusedWith": "bVII"
+    },
+    {
+      "id": "bVII",
+      "label": "bVII",
+      "functionAreas": [
+        "MODAL",
+        "AEOLIAN",
+        "SUBTONIC"
+      ],
+      "caseSensitive": false,
+      "mustNotBeConfusedWith": "VII6"
+    },
+    {
+      "id": "bVI",
+      "label": "bVI",
+      "functionAreas": [
+        "MODAL_MIXTURE",
+        "BORROWED"
+      ],
+      "caseSensitive": false
+    },
+    {
+      "id": "bII6",
+      "label": "bII6",
+      "functionAreas": [
+        "CHROMATIC_PREDOMINANT",
+        "NEAPOLITAN"
+      ],
+      "caseSensitive": false,
+      "usualResolution": [
+        "V"
+      ]
+    },
+    {
+      "id": "+6",
+      "label": "+6",
+      "functionAreas": [
+        "CHROMATIC_PREDOMINANT",
+        "AUGMENTED_SIXTH"
+      ],
+      "caseSensitive": false,
+      "usualResolution": [
+        "V"
+      ]
+    },
+    {
+      "id": "IVminor",
+      "label": "IVminor",
+      "functionAreas": [
+        "MODAL_MIXTURE",
+        "PLAGAL"
+      ],
+      "caseSensitive": false,
+      "usualResolution": [
+        "I"
+      ]
+    },
+    {
+      "id": "V/X",
+      "label": "V/X",
+      "functionAreas": [
+        "APPLIED_DOMINANT"
+      ],
+      "caseSensitive": false,
+      "resolutionModel": [
+        "X"
+      ]
+    },
+    {
+      "id": "VII/X",
+      "label": "VII/X",
+      "functionAreas": [
+        "APPLIED_LEADING_TONE"
+      ],
+      "caseSensitive": false,
+      "resolutionModel": [
+        "X"
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "id": "path-vs-direct-transition",
+      "issue": "Original rows mix direct transitions and multi-chord paths.",
+      "correction": "Interpret rows such as I IV V as I → IV → V, where IV is the immediate successor and V is the continuation."
+    },
+    {
+      "id": "duplicate-major-row",
+      "issue": "The original major list repeated II VI V.",
+      "correction": "Keep II → VI → V only once."
+    },
+    {
+      "id": "minor-III6-clarification",
+      "issue": "Minor III6 is ambiguous.",
+      "correction": "Use III+6 for strict harmonic minor; use III for common/natural minor."
+    },
+    {
+      "id": "VII6-vs-bVII",
+      "issue": "Leading-tone VII6 and subtonic bVII can be confused.",
+      "correction": "Keep VII6 and bVII as separate harmonic entities."
+    },
+    {
+      "id": "V64-definition",
+      "issue": "V64 may conflict with conventional cadential six-four notation.",
+      "correction": "Define V64 explicitly as dominant-function second-inversion sonority in CHORD, or replace with CAD64 where appropriate."
+    }
+  ],
+  "implementationNotes": [
+    "Do not infer chord quality from uppercase or lowercase Roman numerals.",
+    "Mode determines default quality.",
+    "Use accidentals such as bVII and bVI explicitly.",
+    "Use VII6 only for leading-tone-function sonorities.",
+    "Use bVII only for subtonic/modal/Aeolian sonorities.",
+    "Keep strict harmonic minor and common expanded minor as related but separate layers.",
+    "Cadential and circle-of-fifths paths should receive higher priority than connective or optional chromatic paths.",
+    "Chromatic and applied chords should be treated as optional expansions, not as ordinary diatonic successors."
+  ]
+}

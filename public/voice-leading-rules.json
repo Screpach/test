@@ -1,0 +1,2858 @@
+{
+  "schema": "harm31a.voiceLeadingRules.v2",
+  "appName": "Harm31a",
+  "packageName": "harm31a",
+  "generatedAt": "2026-05-10",
+  "description": "Standalone catalogue of the voice-leading, interval-leading, SATB, counterpoint, spacing, doubling, cadence, harmony, and dissonance rules currently implemented or explicitly mentioned in Harm31a.",
+  "pitchAuthority": {
+    "system": "native 31-EDO",
+    "octaveSteps": 31,
+    "usesAbsoluteStep31": true,
+    "usesSpelled31EdoPitches": true,
+    "doesNotUse12EdoPitchClasses": true,
+    "doesNotCollapseEnharmonicSpellings": true,
+    "frequencyFormula": "frequency = referenceHz * 2 ** ((absoluteStep31 - referenceStep31) / 31)"
+  },
+  "sourceCoverage": {
+    "implementedRuleSources": [
+      "src/domain/rules/standardRules31.ts",
+      "src/domain/rules/ruleEngine.ts",
+      "src/domain/rules/ruleProfiles31.ts",
+      "src/domain/rules/intervalLogic31.ts",
+      "src/domain/rules/timeline31.ts",
+      "src/domain/tuning31/interval31.ts",
+      "src/data/voiceRanges31.ts",
+      "src/data/voiceRanges.json"
+    ],
+    "harmoniserSources": [
+      "src/domain/harmoniser/harmoniseSatb.ts",
+      "src/domain/harmoniser/candidateVoicings.ts",
+      "src/domain/harmoniser/candidateChords.ts",
+      "src/domain/harmoniser/constraintCost.ts",
+      "src/domain/harmoniser/beamSearch.ts",
+      "src/domain/harmoniser/solutionRanker.ts"
+    ],
+    "testSources": [
+      "src/tests/ruleEngine31.test.ts",
+      "src/tests/ruleEngine.test.ts",
+      "src/tests/harmoniser31.test.ts",
+      "src/tests/harmoniser.test.ts"
+    ],
+    "documentationAndResearchSources": [
+      "README.md",
+      "AGENTS.md",
+      "docs/RULE_ENGINE.md",
+      "docs/HARMONISER.md",
+      "docs/ARCHITECTURE.md",
+      "docs/AUDIT.md",
+      "docs/ROADMAP.md",
+      "docs/theoretical_framework.md",
+      "docs/generated_tables.md",
+      "docs/report.md",
+      "data/chord_types.csv",
+      "data/cadence_types.csv",
+      "data/modulation_types.csv",
+      "data/harmonic_examples.csv"
+    ],
+    "placeholderRuleProfileFiles": [
+      "src/data/ruleProfiles/commonPracticeSatb.json",
+      "src/data/ruleProfiles/nineteenthCenturyExpanded.json",
+      "src/data/ruleProfiles/strictCounterpoint.json"
+    ],
+    "notes": [
+      "The executable rule profiles live in src/domain/rules/ruleProfiles31.ts.",
+      "The JSON files in src/data/ruleProfiles are placeholders with empty enabledRuleIds and are not the active profile source.",
+      "The rule engine currently filters by enabledRuleIds and applies severityOverrides. Other profile fields are consumed by rules or harmoniser code only where noted below."
+    ]
+  },
+  "nativeIntervalDefinitions31": {
+    "unisonOrOctavePitchClassDistance": 0,
+    "perfectFifthPitchClassDistance": 18,
+    "perfectFourthPitchClassDistance": 13,
+    "majorThirdPitchClassDistance": 10,
+    "minorThirdPitchClassDistance": 8,
+    "basicIntervalClassifier": {
+      "0": "unison, or octave when absolute motion is nonzero and 0 mod 31",
+      "1": "half-sharp-step",
+      "5": "diatonic-step",
+      "8": "minor-third",
+      "10": "major-third",
+      "13": "fourth",
+      "18": "fifth"
+    },
+    "consonantTriadIntervals": [
+      0,
+      8,
+      10,
+      13,
+      18
+    ],
+    "sourceFiles": [
+      "src/domain/rules/intervalLogic31.ts",
+      "src/domain/tuning31/interval31.ts",
+      "docs/RULE_ENGINE.md",
+      "docs/AUDIT.md"
+    ]
+  },
+  "voices": [
+    {
+      "id": "S",
+      "name": "Soprano",
+      "range": {
+        "lowLabel": "C4",
+        "lowAbsoluteStep31": 124,
+        "highLabel": "G5",
+        "highAbsoluteStep31": 173
+      }
+    },
+    {
+      "id": "A",
+      "name": "Alto",
+      "range": {
+        "lowLabel": "G3",
+        "lowAbsoluteStep31": 111,
+        "highLabel": "D5",
+        "highAbsoluteStep31": 160
+      }
+    },
+    {
+      "id": "T",
+      "name": "Tenor",
+      "range": {
+        "lowLabel": "C3",
+        "lowAbsoluteStep31": 93,
+        "highLabel": "G4",
+        "highAbsoluteStep31": 142
+      }
+    },
+    {
+      "id": "B",
+      "name": "Bass",
+      "range": {
+        "lowLabel": "E2",
+        "lowAbsoluteStep31": 72,
+        "highLabel": "C4",
+        "highAbsoluteStep31": 124
+      }
+    }
+  ],
+  "profiles": [
+    {
+      "id": "strictCounterpoint",
+      "name": "Strict counterpoint",
+      "description": "Strictest first-pass profile for species-like voice-leading and dissonance treatment.",
+      "enabledRuleIds": [
+        "range.voice",
+        "spacing.upper",
+        "spacing.tenor-bass",
+        "voice.crossing",
+        "voice.overlap",
+        "parallel.unison",
+        "parallel.fifth",
+        "parallel.octave",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "melodic.large-leap",
+        "melodic.augmented",
+        "melodic.leap-compensation",
+        "melodic.repetition",
+        "harmony.triad",
+        "harmony.incomplete",
+        "harmony.tendency-doubling",
+        "cadence.basic",
+        "dissonance.non-chord-tone"
+      ],
+      "severityOverrides": {
+        "melodic.large-leap": "error",
+        "dissonance.non-chord-tone": "error"
+      },
+      "allowedDissonanceTypes": [
+        "passing",
+        "neighbor",
+        "suspension"
+      ],
+      "beamWidth": 8,
+      "permittedChordVocabulary": [
+        "major-triad",
+        "minor-triad",
+        "diminished-triad"
+      ],
+      "hiddenPerfectStrictness": "strict",
+      "spacingThresholds31": {
+        "sopranoAltoMax": 31,
+        "altoTenorMax": 31,
+        "tenorBassMax": 43,
+        "upperVoiceWarningMax": 31
+      }
+    },
+    {
+      "id": "commonPracticeSatb",
+      "name": "Common-practice SATB",
+      "description": "Balanced 18th/19th-century SATB profile for harmony exercises.",
+      "enabledRuleIds": [
+        "range.voice",
+        "spacing.upper",
+        "spacing.tenor-bass",
+        "voice.crossing",
+        "voice.overlap",
+        "parallel.unison",
+        "parallel.fifth",
+        "parallel.octave",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "melodic.large-leap",
+        "melodic.augmented",
+        "melodic.leap-compensation",
+        "melodic.repetition",
+        "harmony.triad",
+        "harmony.incomplete",
+        "harmony.tendency-doubling",
+        "cadence.basic",
+        "dissonance.non-chord-tone"
+      ],
+      "severityOverrides": {},
+      "allowedDissonanceTypes": [
+        "passing",
+        "neighbor",
+        "suspension",
+        "accented-passing"
+      ],
+      "beamWidth": 12,
+      "permittedChordVocabulary": [
+        "major-triad",
+        "minor-triad",
+        "diminished-triad"
+      ],
+      "hiddenPerfectStrictness": "outer-voices",
+      "spacingThresholds31": {
+        "sopranoAltoMax": 31,
+        "altoTenorMax": 31,
+        "tenorBassMax": 43,
+        "upperVoiceWarningMax": 31
+      }
+    },
+    {
+      "id": "nineteenthCenturyExpanded",
+      "name": "Nineteenth-century expanded",
+      "description": "More permissive profile for later common-practice color and freer doubling.",
+      "enabledRuleIds": [
+        "range.voice",
+        "spacing.upper",
+        "spacing.tenor-bass",
+        "voice.crossing",
+        "voice.overlap",
+        "parallel.unison",
+        "parallel.fifth",
+        "parallel.octave",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "melodic.large-leap",
+        "melodic.augmented",
+        "melodic.leap-compensation",
+        "melodic.repetition",
+        "harmony.triad",
+        "harmony.incomplete",
+        "harmony.tendency-doubling",
+        "cadence.basic",
+        "dissonance.non-chord-tone"
+      ],
+      "severityOverrides": {
+        "hidden.outer-fifth": "style",
+        "hidden.outer-octave": "style",
+        "harmony.tendency-doubling": "style"
+      },
+      "allowedDissonanceTypes": [
+        "passing",
+        "neighbor",
+        "suspension",
+        "altered-neighbor",
+        "appoggiatura"
+      ],
+      "beamWidth": 20,
+      "permittedChordVocabulary": [
+        "major-triad",
+        "minor-triad",
+        "diminished-triad",
+        "augmented-triad"
+      ],
+      "hiddenPerfectStrictness": "outer-voices",
+      "spacingThresholds31": {
+        "sopranoAltoMax": 36,
+        "altoTenorMax": 36,
+        "tenorBassMax": 48,
+        "upperVoiceWarningMax": 36
+      }
+    },
+    {
+      "id": "customRevisionist31",
+      "name": "Custom revisionist 31",
+      "description": "Experimental native-31 profile with softer historical constraints.",
+      "enabledRuleIds": [
+        "range.voice",
+        "spacing.upper",
+        "spacing.tenor-bass",
+        "voice.crossing",
+        "voice.overlap",
+        "parallel.unison",
+        "parallel.fifth",
+        "parallel.octave",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "melodic.large-leap",
+        "melodic.augmented",
+        "melodic.leap-compensation",
+        "melodic.repetition",
+        "harmony.triad",
+        "harmony.incomplete",
+        "harmony.tendency-doubling",
+        "cadence.basic",
+        "dissonance.non-chord-tone"
+      ],
+      "severityOverrides": {
+        "dissonance.non-chord-tone": "style",
+        "melodic.augmented": "style"
+      },
+      "allowedDissonanceTypes": [
+        "passing",
+        "neighbor",
+        "suspension",
+        "free-color"
+      ],
+      "beamWidth": 24,
+      "permittedChordVocabulary": [
+        "major-triad",
+        "minor-triad",
+        "diminished-triad",
+        "augmented-triad"
+      ],
+      "hiddenPerfectStrictness": "off",
+      "spacingThresholds31": {
+        "sopranoAltoMax": 43,
+        "altoTenorMax": 43,
+        "tenorBassMax": 55,
+        "upperVoiceWarningMax": 43
+      }
+    }
+  ],
+  "implementationNotes": [
+    "All implemented rule diagnostics operate on Score31 notes through absoluteStep31 and native 31-EDO pitch-class distances.",
+    "All four executable profiles currently enable the same CORE_RULE_IDS31; profiles differ through severityOverrides, allowed dissonance labels, beamWidth, chord vocabulary, hiddenPerfectStrictness metadata, and spacing thresholds.",
+    "hiddenPerfectStrictness is declared in profiles, but the current evaluator does not branch on this field. Hidden perfect rules remain enabled wherever their rule IDs are enabled, with only severityOverrides changing output severity.",
+    "allowedDissonanceTypes is declared in profiles and used as profile metadata, but the current non-chord-tone rule is heuristic and does not yet classify individual dissonance types.",
+    "upperVoiceWarningMax is declared in spacingThresholds31 but the current spacing rule reads sopranoAltoMax, altoTenorMax, and tenorBassMax directly.",
+    "The harmoniser uses final rule diagnostics for hard errors and also applies search-time costs and prefilters for range, SATB ordering, severe spacing, smoothness, root doubling, and parallel perfect intervals."
+  ],
+  "implementedRules": [
+    {
+      "id": "range.voice",
+      "name": "SATB voice ranges",
+      "status": "implemented",
+      "category": "range",
+      "scope": "vertical",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Every sounding note must stay within the configured range for its SATB voice.",
+      "trigger": "A note's absoluteStep31 is lower than the active voice range low step or higher than the active voice range high step.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "profileInputs": [
+        "voiceRangeOverrides"
+      ],
+      "defaultRanges": {
+        "S": "C4-G5",
+        "A": "G3-D5",
+        "T": "C3-G4",
+        "B": "E2-C4"
+      },
+      "diagnosticSuggestion": "Move the note into the voice range or choose a different voice/register.",
+      "harmoniserUse": "Candidate voicing generation only creates notes inside src/data/voiceRanges.json ranges; final diagnostics also reject out-of-range notes as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/data/voiceRanges31.ts",
+        "src/data/voiceRanges.json",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts",
+        "src/tests/harmoniser31.test.ts"
+      ]
+    },
+    {
+      "id": "spacing.upper",
+      "name": "Upper-voice spacing",
+      "status": "implemented",
+      "category": "spacing",
+      "scope": "vertical",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "Adjacent upper voices should not exceed the profile's configured maximum spacing.",
+      "trigger": "The S-A span or A-T span, measured as upper absoluteStep31 minus lower absoluteStep31, is greater than the profile threshold.",
+      "voicesChecked": [
+        [
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "T"
+        ]
+      ],
+      "profileInputs": [
+        "spacingThresholds31.sopranoAltoMax",
+        "spacingThresholds31.altoTenorMax"
+      ],
+      "thresholdsByProfile31": {
+        "strictCounterpoint": {
+          "sopranoAltoMax": 31,
+          "altoTenorMax": 31
+        },
+        "commonPracticeSatb": {
+          "sopranoAltoMax": 31,
+          "altoTenorMax": 31
+        },
+        "nineteenthCenturyExpanded": {
+          "sopranoAltoMax": 36,
+          "altoTenorMax": 36
+        },
+        "customRevisionist31": {
+          "sopranoAltoMax": 43,
+          "altoTenorMax": 43
+        }
+      },
+      "diagnosticSuggestion": "Bring the upper voices closer together or redistribute the chord tones.",
+      "harmoniserUse": "Candidate voicings with S-A or A-T spacing above 31 steps are rejected before search; smaller spacing discomfort adds cost above 18 steps.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "spacing.tenor-bass",
+      "name": "Tenor-bass spacing",
+      "status": "implemented",
+      "category": "spacing",
+      "scope": "vertical",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Tenor and bass may be wider than the upper voices, but a very wide T-B span is flagged as stylistic risk.",
+      "trigger": "The T-B span, measured as tenor absoluteStep31 minus bass absoluteStep31, is greater than the profile threshold.",
+      "voicesChecked": [
+        [
+          "T",
+          "B"
+        ]
+      ],
+      "profileInputs": [
+        "spacingThresholds31.tenorBassMax"
+      ],
+      "thresholdsByProfile31": {
+        "strictCounterpoint": 43,
+        "commonPracticeSatb": 43,
+        "nineteenthCenturyExpanded": 48,
+        "customRevisionist31": 55
+      },
+      "diagnosticSuggestion": "Consider a closer tenor position unless this is a deliberate open voicing.",
+      "harmoniserUse": "Candidate voicings with T-B spacing above 48 steps are rejected before search; smaller T-B spacing discomfort adds cost above 31 steps.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ]
+    },
+    {
+      "id": "voice.crossing",
+      "name": "No voice crossing",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "vertical",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "SATB vertical order should keep soprano above alto, alto above tenor, and tenor above bass.",
+      "trigger": "For any adjacent SATB pair, the upper voice absoluteStep31 is lower than the lower voice absoluteStep31.",
+      "voicesChecked": [
+        [
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "T"
+        ],
+        [
+          "T",
+          "B"
+        ]
+      ],
+      "diagnosticSuggestion": "Move one of the voices back into normal vertical order.",
+      "harmoniserUse": "Candidate voicings are rejected unless S >= A >= T >= B in absoluteStep31; final diagnostics treat crossings as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "voice.overlap",
+      "name": "No voice overlap",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "An adjacent voice should not move beyond the previous register of its neighbor between two sonorities.",
+      "trigger": "For adjacent voices, upperTo is below lowerFrom, or lowerTo is above upperFrom.",
+      "voicesChecked": [
+        [
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "T"
+        ],
+        [
+          "T",
+          "B"
+        ]
+      ],
+      "diagnosticSuggestion": "Use smaller motion or revoice the destination chord.",
+      "harmoniserUse": "Final diagnostics score overlaps as warnings; overlap cost is included through diagnosticCost when ranking generated solutions.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md",
+        "README.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "parallel.unison",
+      "name": "No parallel unisons",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Two voices should not move in the same nonzero direction from one exact unison to another exact unison.",
+      "trigger": "Any ordered voice pair has nonzero same-direction motion and the previous and current vertical intervals both classify as unison.",
+      "voicesChecked": "all ordered SATB voice pairs",
+      "perfectIntervalDefinition31": "Unison is pitch-class distance 0 with absolute vertical interval 0.",
+      "diagnosticSuggestion": "Use contrary or oblique motion, or change one chord tone.",
+      "harmoniserUse": "Final diagnostics treat parallel unisons as hard errors; search-time parallel perfect penalty also catches same-kind perfect intervals.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ]
+    },
+    {
+      "id": "parallel.fifth",
+      "name": "No parallel perfect fifths",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Two voices should not move in the same nonzero direction from one perfect fifth to another perfect fifth.",
+      "trigger": "Any ordered voice pair has nonzero same-direction motion and the previous and current vertical intervals both classify as fifth.",
+      "voicesChecked": "all ordered SATB voice pairs",
+      "perfectIntervalDefinition31": "Perfect fifth is native 31-EDO pitch-class distance 18.",
+      "diagnosticSuggestion": "Use contrary or oblique motion, or change one chord tone.",
+      "harmoniserUse": "The harmoniser adds a 1200 search penalty for parallel perfect intervals and final diagnostics treat parallel fifths as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "parallel.octave",
+      "name": "No parallel octaves",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Two voices should not move in the same nonzero direction from one octave to another octave.",
+      "trigger": "Any ordered voice pair has nonzero same-direction motion and the previous and current vertical intervals both classify as octave.",
+      "voicesChecked": "all ordered SATB voice pairs",
+      "perfectIntervalDefinition31": "Octave is native 31-EDO pitch-class distance 0 with nonzero absolute vertical interval.",
+      "diagnosticSuggestion": "Use contrary or oblique motion, or change one chord tone.",
+      "harmoniserUse": "The harmoniser adds a 1200 search penalty for parallel perfect intervals and final diagnostics treat parallel octaves as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "hidden.outer-fifth",
+      "name": "Hidden/direct fifths in outer voices",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "The outer voices should not approach a perfect fifth by similar motion when the soprano leaps.",
+      "trigger": "Soprano and bass both move in the same nonzero direction, soprano motion is greater than 5 native steps, and the destination S-B interval classifies as a perfect fifth.",
+      "voicesChecked": [
+        [
+          "S",
+          "B"
+        ]
+      ],
+      "perfectIntervalDefinition31": "Perfect fifth is native 31-EDO pitch-class distance 18.",
+      "profileSeverityOverrides": {
+        "nineteenthCenturyExpanded": "style"
+      },
+      "diagnosticSuggestion": "Approach the perfect interval by contrary motion or stepwise soprano motion.",
+      "harmoniserUse": "Final diagnostics score hidden/direct fifths as warnings or style notices depending on profile.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "hidden.outer-octave",
+      "name": "Hidden/direct octaves in outer voices",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "The outer voices should not approach an octave by similar motion when the soprano leaps.",
+      "trigger": "Soprano and bass both move in the same nonzero direction, soprano motion is greater than 5 native steps, and the destination S-B interval classifies as an octave.",
+      "voicesChecked": [
+        [
+          "S",
+          "B"
+        ]
+      ],
+      "perfectIntervalDefinition31": "Octave is native 31-EDO pitch-class distance 0 with nonzero absolute vertical interval.",
+      "profileSeverityOverrides": {
+        "nineteenthCenturyExpanded": "style"
+      },
+      "diagnosticSuggestion": "Approach the perfect interval by contrary motion or stepwise soprano motion.",
+      "harmoniserUse": "Final diagnostics score hidden/direct octaves as warnings or style notices depending on profile.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ]
+    },
+    {
+      "id": "melodic.large-leap",
+      "name": "Large melodic leap",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "A single voice should avoid very large melodic leaps unless justified and compensated.",
+      "trigger": "Any voice moves by more than 18 native 31-EDO steps between adjacent slices.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "profileSeverityOverrides": {
+        "strictCounterpoint": "error"
+      },
+      "diagnosticSuggestion": "Prefer stepwise motion or compensate the leap in the opposite direction.",
+      "harmoniserUse": "Final diagnostics add cost for large leaps; search-time smoothness cost also penalizes large motion in every voice.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ]
+    },
+    {
+      "id": "melodic.augmented",
+      "name": "Augmented melodic interval",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Altered or augmented melodic intervals are stylistically flagged for review.",
+      "trigger": "Any voice moves by at least 6 native steps and classifyBasicInterval31 returns unclassified.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "profileSeverityOverrides": {
+        "customRevisionist31": "style"
+      },
+      "diagnosticSuggestion": "Check whether the altered spelling and resolution are intentional.",
+      "harmoniserUse": "Final diagnostics add a style cost when this rule fires.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/tuning31/interval31.ts",
+        "docs/RULE_ENGINE.md"
+      ]
+    },
+    {
+      "id": "melodic.leap-compensation",
+      "name": "Leap compensation",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "A large leap is usually followed by motion in the opposite direction.",
+      "trigger": "A voice makes a previous motion greater than 18 native steps, then continues in the same nonzero direction on the next motion.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "diagnosticSuggestion": "Move the following note back by step if possible.",
+      "harmoniserUse": "Final diagnostics add a style cost when this rule fires.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md"
+      ]
+    },
+    {
+      "id": "melodic.repetition",
+      "name": "Repeated-note stagnation",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Long repeated-note runs can make a line feel static.",
+      "trigger": "A voice reaches four consecutive sounding notes with the same absoluteStep31.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "diagnosticSuggestion": "Consider stepwise motion or a neighboring figure.",
+      "harmoniserUse": "Final diagnostics add a style cost when this rule fires.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md"
+      ]
+    },
+    {
+      "id": "harmony.triad",
+      "name": "Triad classification",
+      "status": "implemented",
+      "category": "harmony",
+      "scope": "vertical",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Classify stable three-or-more-note sonorities as native 31-EDO triads when confidence is high enough.",
+      "trigger": "A vertical slice has at least three sounding notes and classifySonority31 returns a chord with confidence at least 0.65.",
+      "permittedChordKinds31": {
+        "major-triad": [
+          0,
+          10,
+          18
+        ],
+        "minor-triad": [
+          0,
+          8,
+          18
+        ],
+        "diminished-triad": [
+          0,
+          8,
+          16
+        ],
+        "augmented-triad": [
+          0,
+          10,
+          20
+        ]
+      },
+      "diagnosticSuggestion": "Use this as harmonic context for spacing, doubling, and dissonance checks.",
+      "harmoniserUse": "Candidate chords use the profile's permittedChordVocabulary; final diagnostics can classify resulting sonorities.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmony/chord31.ts",
+        "src/domain/harmony/sonorityClassifier.ts",
+        "src/domain/harmoniser/candidateChords.ts",
+        "docs/RULE_ENGINE.md",
+        "src/tests/ruleEngine31.test.ts"
+      ]
+    },
+    {
+      "id": "harmony.incomplete",
+      "name": "Incomplete chord",
+      "status": "implemented",
+      "category": "harmony",
+      "scope": "vertical",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Flag a classified chord that appears to omit one or more expected chord tones.",
+      "trigger": "A vertical slice has at least three sounding notes, classifySonority31 returns a chord, and missingSteps31 is nonempty.",
+      "diagnosticSuggestion": "Check whether the omission is intended or caused by doubling.",
+      "harmoniserUse": "Final diagnostics add a style cost for incomplete sonorities.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ]
+    },
+    {
+      "id": "harmony.tendency-doubling",
+      "name": "Doubled tendency tone",
+      "status": "implemented",
+      "category": "doubling",
+      "scope": "vertical",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "Likely tendency pitch classes should normally not be doubled.",
+      "trigger": "A vertical sonority doubles native pitch-class step 12, 17, 27, or 30.",
+      "likelyTendencyPitchClasses31": [
+        12,
+        17,
+        27,
+        30
+      ],
+      "profileSeverityOverrides": {
+        "nineteenthCenturyExpanded": "style"
+      },
+      "diagnosticSuggestion": "Prefer doubling the root or a stable chord tone unless the tendency tone treatment is deliberate.",
+      "harmoniserUse": "Final diagnostics add warning or style cost; candidate voicing generation separately gives a small cost when the root is not doubled.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "data/chord_types.csv",
+        "data/modulation_types.csv"
+      ]
+    },
+    {
+      "id": "cadence.basic",
+      "name": "Basic cadence detection",
+      "status": "implemented",
+      "category": "cadence",
+      "scope": "phrase",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Identify a final outer-voice sonority that is stable enough to be a basic cadence candidate.",
+      "trigger": "The last slice and previous slice exist, the last bass and soprano sound, and the final soprano-bass pitch-class distance is 0, 10, or 18.",
+      "stableOuterVoiceDistances31": [
+        0,
+        10,
+        18
+      ],
+      "diagnosticSuggestion": "A future key-aware cadence pass can refine this label.",
+      "harmoniserUse": "Generated solutions receive a small cadence score bonus when the final S-B pitch-class distance is 0, 10, or 18.",
+      "limitations": [
+        "Not key-aware",
+        "Not phrase-aware beyond checking the final slice"
+      ],
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "data/cadence_types.csv"
+      ]
+    },
+    {
+      "id": "dissonance.non-chord-tone",
+      "name": "Non-chord tone candidate",
+      "status": "implemented",
+      "category": "dissonance",
+      "scope": "vertical",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "Flag a note that does not belong to the best first-pass chord classification for a four-or-more-note sonority.",
+      "trigger": "A vertical slice has at least four sounding notes, classifySonority31 returns a chord, and nonChordNotes is nonempty.",
+      "profileSeverityOverrides": {
+        "strictCounterpoint": "error",
+        "customRevisionist31": "style"
+      },
+      "relatedDissonanceTypesMentioned": [
+        "passing tone",
+        "neighbor tone",
+        "suspension",
+        "appoggiatura"
+      ],
+      "diagnosticSuggestion": "Check whether it behaves as a passing tone, neighbor tone, suspension, or appoggiatura.",
+      "harmoniserUse": "Final diagnostics add error, warning, or style cost depending on profile.",
+      "limitations": [
+        "Heuristic only",
+        "Does not yet classify preparation, accent, duration, or resolution",
+        "Does not yet consume allowedDissonanceTypes to permit or reject a specific dissonance type"
+      ],
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "data/chord_types.csv",
+        "docs/theoretical_framework.md"
+      ]
+    }
+  ],
+  "mentionedOrDeferredRules": [
+    {
+      "id": "suspension.preparation-resolution",
+      "name": "Suspension preparation and resolution",
+      "status": "deferred",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in profiles",
+        "future rule family",
+        "suspension-based sonority",
+        "voice-leading-derived harmony"
+      ],
+      "expectedRuleIdea": "A suspension should be prepared as a consonance or retained tone, form a dissonance, and resolve according to its contrapuntal context.",
+      "currentImplementation": "src/domain/rules/standardRules31.ts exports suspensionRules as an empty array.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "retardation.resolution",
+      "name": "Retardation resolution",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "suspension-based sonority related process"
+      ],
+      "expectedRuleIdea": "A retardation should be analyzed through preparation, dissonant delay, and resolution in the affected voice.",
+      "currentImplementation": "No executable retardation evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "passing-tone.license",
+      "name": "Passing tone treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in profiles",
+        "non-chord-tone diagnostic suggestion",
+        "voice-leading priority topic"
+      ],
+      "expectedRuleIdea": "A passing tone should be understood as linear stepwise motion between chord tones, with accent and duration affecting severity.",
+      "currentImplementation": "Non-chord-tone candidates may suggest passing-tone interpretation, but no dedicated passing-tone classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/rules/standardRules31.ts",
+        "docs/theoretical_framework.md",
+        "docs/RULE_ENGINE.md"
+      ]
+    },
+    {
+      "id": "neighbor-tone.license",
+      "name": "Neighbor tone treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in profiles",
+        "non-chord-tone diagnostic suggestion",
+        "melodic repetition suggestion"
+      ],
+      "expectedRuleIdea": "A neighbor tone should leave and return to a stable pitch by local stepwise motion, with altered-neighbor variants allowed in expanded profiles.",
+      "currentImplementation": "No dedicated neighbor-tone classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/rules/standardRules31.ts",
+        "docs/theoretical_framework.md"
+      ]
+    },
+    {
+      "id": "accented-passing.license",
+      "name": "Accented passing tone treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in commonPracticeSatb"
+      ],
+      "expectedRuleIdea": "An accented passing tone should be judged by metrical accent, linear motion, and resolution.",
+      "currentImplementation": "No metrical accent dissonance classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/theoretical_framework.md"
+      ]
+    },
+    {
+      "id": "altered-neighbor.license",
+      "name": "Altered neighbor treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in nineteenthCenturyExpanded"
+      ],
+      "expectedRuleIdea": "An altered neighbor should preserve spelling-sensitive 31-EDO identity and resolve intentionally.",
+      "currentImplementation": "No dedicated altered-neighbor classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts"
+      ]
+    },
+    {
+      "id": "appoggiatura.resolution",
+      "name": "Appoggiatura resolution",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in nineteenthCenturyExpanded",
+        "non-chord-tone diagnostic suggestion",
+        "appoggiatura chord vocabulary item",
+        "voice-leading priority topic"
+      ],
+      "expectedRuleIdea": "An appoggiatura should be treated as an accented dissonance resolving by step, not as an autonomous chord by default.",
+      "currentImplementation": "No dedicated appoggiatura classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/rules/standardRules31.ts",
+        "data/chord_types.csv",
+        "docs/theoretical_framework.md",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "accented-dissonance.treatment",
+      "name": "Accented dissonance treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "appoggiatura and seventh-chord context"
+      ],
+      "expectedRuleIdea": "Accented dissonances should be evaluated by accent, duration, preparation, and resolution.",
+      "currentImplementation": "No accent-aware dissonance evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv"
+      ]
+    },
+    {
+      "id": "seventh.preparation-resolution",
+      "name": "Seventh preparation and resolution",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "diatonic seventh chord historical interpretation"
+      ],
+      "expectedRuleIdea": "A seventh should be checked as a prepared or accented dissonance requiring contextual resolution unless the style supports another treatment.",
+      "currentImplementation": "No dedicated seventh preparation/resolution evaluator exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "augmented-sixth.contrary-resolution",
+      "name": "Augmented sixth contrary-motion resolution",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "augmented sixth sonority vocabulary item",
+        "augmented sixth reinterpretation modulation topic"
+      ],
+      "expectedRuleIdea": "An expanded sixth sonority often resolves by contrary motion and must preserve exact spelling and resolution evidence.",
+      "currentImplementation": "No dedicated augmented-sixth detection or resolution evaluator exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "data/modulation_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "common-tone.continuity",
+      "name": "Common-tone continuity",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "common-tone sonority",
+        "common-tone procedures",
+        "abrupt tonal shift continuity"
+      ],
+      "expectedRuleIdea": "Retained tones should be tracked through chromatic displacement, registral emphasis, or tonal redirection.",
+      "currentImplementation": "No dedicated common-tone continuity evaluator exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "data/modulation_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "enharmonic-reinterpretation.spelling-sensitive-resolution",
+      "name": "Enharmonic reinterpretation and spelling-sensitive resolution",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "enharmonically reinterpreted chord",
+        "enharmonic modulation",
+        "diminished seventh reinterpretation",
+        "tendency-tone reinterpretation"
+      ],
+      "expectedRuleIdea": "Changed spelling or resolution should be tracked without collapsing enharmonic spellings into an equal-tempered pitch-class set.",
+      "currentImplementation": "The pitch model preserves spelling, but no dedicated enharmonic reinterpretation rule exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "data/modulation_types.csv",
+        "docs/theoretical_framework.md",
+        "docs/report.md",
+        "docs/generated_tables.md",
+        "README.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "linear-chromaticism.resolution",
+      "name": "Linear chromaticism and altered-note resolution",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "chromatic embellishment",
+        "chromatic pivot modulation"
+      ],
+      "expectedRuleIdea": "Altered notes should be checked for spelling, source notation, tendency, and resolution in the affected voice.",
+      "currentImplementation": "The melodic.augmented rule flags altered or unclassified intervals, but no full linear-chromaticism evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/modulation_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md",
+        "src/domain/rules/standardRules31.ts"
+      ]
+    },
+    {
+      "id": "contrary-motion.structure",
+      "name": "Contrary-motion structures",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "augmented sixth resolution topic",
+        "hidden perfect workaround suggestion"
+      ],
+      "expectedRuleIdea": "Contrary motion should be recognized as a preferred approach to some perfect intervals and expanded-sixth resolutions.",
+      "currentImplementation": "Contrary motion is only indirectly favored because parallel-perfect and hidden-perfect rules require same or similar motion to trigger.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "src/domain/rules/standardRules31.ts",
+        "data/chord_types.csv",
+        "data/modulation_types.csv"
+      ]
+    },
+    {
+      "id": "cadence.voice-leading-confirmation",
+      "name": "Cadential voice-leading confirmation",
+      "status": "partly-implemented",
+      "category": "cadence",
+      "scope": "phrase",
+      "mentionedAs": [
+        "authentic cadence upper-voice resolution",
+        "deceptive cadence expected resolution",
+        "evaded cadence altered resolution",
+        "expanded cadence suspensions and bass prolongation"
+      ],
+      "expectedRuleIdea": "Cadences should be evaluated by bass motion, upper-voice resolution, phrase context, expected and actual resolution, and possible evasion or weakening.",
+      "currentImplementation": "cadence.basic only checks final outer-voice stability by pitch-class distance 0, 10, or 18 and is not key-aware.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "data/cadence_types.csv",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ]
+    },
+    {
+      "id": "voice-leading-derived-harmony",
+      "name": "Voice-leading-derived harmony before root-based labels",
+      "status": "mentioned-only",
+      "category": "harmony",
+      "scope": "global",
+      "mentionedAs": [
+        "historical analysis principle",
+        "linear chord",
+        "chromatic passing sonority"
+      ],
+      "expectedRuleIdea": "Many verticalities should be explained as the result of simultaneous linear motions before assigning autonomous chord identity.",
+      "currentImplementation": "harmony.triad and dissonance.non-chord-tone are first-pass heuristics; no full linear-chord evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md",
+        "README.md"
+      ]
+    }
+  ],
+  "harmoniserConstraintSummary": {
+    "hardConstraintsMentionedInDocs": [
+      "voice range",
+      "voice crossing",
+      "parallel unison/fifth/octave after final rule evaluation"
+    ],
+    "softConstraintsMentionedInDocs": [
+      "spacing discomfort",
+      "large motion",
+      "hidden perfect warnings",
+      "incomplete sonorities",
+      "doubled tendency-tone warnings",
+      "non-chord tone warnings"
+    ],
+    "searchTimeCosts": {
+      "diagnosticCost": {
+        "error": 1000,
+        "warning": 40,
+        "style": 8
+      },
+      "parallelPerfectPenalty": 1200,
+      "smoothnessCost": "sum(abs(nextStep31 - previousStep31) * 0.12) across voices",
+      "rootDoublingCost": "0 if root is doubled or present at least once in generated voicing; 6 otherwise",
+      "cadenceBonus": "8 when final S-B pitch-class distance is 0, 10, or 18"
+    },
+    "candidatePrefilters": [
+      "Generated notes are drawn from each voice range.",
+      "Voicings must satisfy S >= A >= T >= B.",
+      "Voicings are rejected when S-A > 31, A-T > 31, or T-B > 48 native steps."
+    ],
+    "sourceFiles": [
+      "src/domain/harmoniser/harmoniseSatb.ts",
+      "src/domain/harmoniser/candidateVoicings.ts",
+      "src/domain/harmoniser/constraintCost.ts",
+      "docs/HARMONISER.md"
+    ]
+  },
+  "currentLimitations": [
+    "The rule checker is a rigorous first pass, not a complete historical treatise implementation.",
+    "Cadence detection is not key-aware or phrase-aware beyond the final sonority.",
+    "Non-chord-tone classification is heuristic.",
+    "Suspension, retardation, passing-tone, neighbor-tone, appoggiatura, seventh-resolution, augmented-sixth, common-tone, and enharmonic-reinterpretation rules are mentioned or scaffolded but not fully implemented.",
+    "Later 19th-century licenses are currently represented mostly through profile severity changes and chord vocabulary, not detailed repertoire-specific exception logic.",
+    "The harmoniser is currently triad-focused and best suited to short examples."
+  ],
+  "catalogScope": {
+    "independentPublicFile": true,
+    "canonicalPublicPath": "public/voice-leading-rules.json",
+    "includesImplementedRules": true,
+    "includesMentionedAndDeferredRules": true,
+    "includesVoiceLeadingRules": true,
+    "includesIntervalLeadingRules31": true,
+    "exactPhraseNote": "The exact phrase interval-leading is not used as a source-code rule category; this file treats interval-leading as rules whose trigger depends on melodic interval size, vertical interval class, interval approach, or intervallic cadence/key relation evidence."
+  },
+  "ruleCounts": {
+    "totalRulesCatalogued": 35,
+    "implementedRules": 19,
+    "mentionedOrDeferredRules": 16,
+    "byStatus": {
+      "implemented": [
+        "cadence.basic",
+        "dissonance.non-chord-tone",
+        "harmony.incomplete",
+        "harmony.tendency-doubling",
+        "harmony.triad",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "melodic.augmented",
+        "melodic.large-leap",
+        "melodic.leap-compensation",
+        "melodic.repetition",
+        "parallel.fifth",
+        "parallel.octave",
+        "parallel.unison",
+        "range.voice",
+        "spacing.tenor-bass",
+        "spacing.upper",
+        "voice.crossing",
+        "voice.overlap"
+      ],
+      "deferred": [
+        "suspension.preparation-resolution"
+      ],
+      "mentioned-only": [
+        "accented-dissonance.treatment",
+        "accented-passing.license",
+        "altered-neighbor.license",
+        "appoggiatura.resolution",
+        "augmented-sixth.contrary-resolution",
+        "common-tone.continuity",
+        "contrary-motion.structure",
+        "enharmonic-reinterpretation.spelling-sensitive-resolution",
+        "linear-chromaticism.resolution",
+        "neighbor-tone.license",
+        "passing-tone.license",
+        "retardation.resolution",
+        "seventh.preparation-resolution",
+        "voice-leading-derived-harmony"
+      ],
+      "partly-implemented": [
+        "cadence.voice-leading-confirmation"
+      ]
+    },
+    "byCategory": {
+      "range": [
+        "range.voice"
+      ],
+      "spacing": [
+        "spacing.tenor-bass",
+        "spacing.upper"
+      ],
+      "voice-leading": [
+        "augmented-sixth.contrary-resolution",
+        "common-tone.continuity",
+        "contrary-motion.structure",
+        "enharmonic-reinterpretation.spelling-sensitive-resolution",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "linear-chromaticism.resolution",
+        "parallel.fifth",
+        "parallel.octave",
+        "parallel.unison",
+        "voice.crossing",
+        "voice.overlap"
+      ],
+      "counterpoint": [
+        "melodic.augmented",
+        "melodic.large-leap",
+        "melodic.leap-compensation",
+        "melodic.repetition"
+      ],
+      "harmony": [
+        "harmony.incomplete",
+        "harmony.triad",
+        "voice-leading-derived-harmony"
+      ],
+      "doubling": [
+        "harmony.tendency-doubling"
+      ],
+      "cadence": [
+        "cadence.basic",
+        "cadence.voice-leading-confirmation"
+      ],
+      "dissonance": [
+        "accented-dissonance.treatment",
+        "accented-passing.license",
+        "altered-neighbor.license",
+        "appoggiatura.resolution",
+        "dissonance.non-chord-tone",
+        "neighbor-tone.license",
+        "passing-tone.license",
+        "retardation.resolution",
+        "seventh.preparation-resolution",
+        "suspension.preparation-resolution"
+      ]
+    },
+    "byScope": {
+      "vertical": [
+        "dissonance.non-chord-tone",
+        "harmony.incomplete",
+        "harmony.tendency-doubling",
+        "harmony.triad",
+        "range.voice",
+        "spacing.tenor-bass",
+        "spacing.upper",
+        "voice.crossing"
+      ],
+      "horizontal": [
+        "accented-dissonance.treatment",
+        "accented-passing.license",
+        "altered-neighbor.license",
+        "appoggiatura.resolution",
+        "augmented-sixth.contrary-resolution",
+        "common-tone.continuity",
+        "contrary-motion.structure",
+        "enharmonic-reinterpretation.spelling-sensitive-resolution",
+        "hidden.outer-fifth",
+        "hidden.outer-octave",
+        "linear-chromaticism.resolution",
+        "melodic.augmented",
+        "melodic.large-leap",
+        "melodic.leap-compensation",
+        "melodic.repetition",
+        "neighbor-tone.license",
+        "parallel.fifth",
+        "parallel.octave",
+        "parallel.unison",
+        "passing-tone.license",
+        "retardation.resolution",
+        "seventh.preparation-resolution",
+        "suspension.preparation-resolution",
+        "voice.overlap"
+      ],
+      "phrase": [
+        "cadence.basic",
+        "cadence.voice-leading-confirmation"
+      ],
+      "global": [
+        "voice-leading-derived-harmony"
+      ]
+    }
+  },
+  "ruleIndex": {
+    "allRuleIds": [
+      "range.voice",
+      "spacing.upper",
+      "spacing.tenor-bass",
+      "voice.crossing",
+      "voice.overlap",
+      "parallel.unison",
+      "parallel.fifth",
+      "parallel.octave",
+      "hidden.outer-fifth",
+      "hidden.outer-octave",
+      "melodic.large-leap",
+      "melodic.augmented",
+      "melodic.leap-compensation",
+      "melodic.repetition",
+      "harmony.triad",
+      "harmony.incomplete",
+      "harmony.tendency-doubling",
+      "cadence.basic",
+      "dissonance.non-chord-tone",
+      "suspension.preparation-resolution",
+      "retardation.resolution",
+      "passing-tone.license",
+      "neighbor-tone.license",
+      "accented-passing.license",
+      "altered-neighbor.license",
+      "appoggiatura.resolution",
+      "accented-dissonance.treatment",
+      "seventh.preparation-resolution",
+      "augmented-sixth.contrary-resolution",
+      "common-tone.continuity",
+      "enharmonic-reinterpretation.spelling-sensitive-resolution",
+      "linear-chromaticism.resolution",
+      "contrary-motion.structure",
+      "cadence.voice-leading-confirmation",
+      "voice-leading-derived-harmony"
+    ],
+    "implementedRuleIds": [
+      "range.voice",
+      "spacing.upper",
+      "spacing.tenor-bass",
+      "voice.crossing",
+      "voice.overlap",
+      "parallel.unison",
+      "parallel.fifth",
+      "parallel.octave",
+      "hidden.outer-fifth",
+      "hidden.outer-octave",
+      "melodic.large-leap",
+      "melodic.augmented",
+      "melodic.leap-compensation",
+      "melodic.repetition",
+      "harmony.triad",
+      "harmony.incomplete",
+      "harmony.tendency-doubling",
+      "cadence.basic",
+      "dissonance.non-chord-tone"
+    ],
+    "mentionedOrDeferredRuleIds": [
+      "suspension.preparation-resolution",
+      "retardation.resolution",
+      "passing-tone.license",
+      "neighbor-tone.license",
+      "accented-passing.license",
+      "altered-neighbor.license",
+      "appoggiatura.resolution",
+      "accented-dissonance.treatment",
+      "seventh.preparation-resolution",
+      "augmented-sixth.contrary-resolution",
+      "common-tone.continuity",
+      "enharmonic-reinterpretation.spelling-sensitive-resolution",
+      "linear-chromaticism.resolution",
+      "contrary-motion.structure",
+      "cadence.voice-leading-confirmation",
+      "voice-leading-derived-harmony"
+    ],
+    "voiceLeadingRuleIds": [
+      "accented-passing.license",
+      "altered-neighbor.license",
+      "appoggiatura.resolution",
+      "augmented-sixth.contrary-resolution",
+      "cadence.voice-leading-confirmation",
+      "common-tone.continuity",
+      "contrary-motion.structure",
+      "enharmonic-reinterpretation.spelling-sensitive-resolution",
+      "hidden.outer-fifth",
+      "hidden.outer-octave",
+      "linear-chromaticism.resolution",
+      "melodic.augmented",
+      "melodic.large-leap",
+      "melodic.leap-compensation",
+      "melodic.repetition",
+      "neighbor-tone.license",
+      "parallel.fifth",
+      "parallel.octave",
+      "parallel.unison",
+      "passing-tone.license",
+      "range.voice",
+      "retardation.resolution",
+      "spacing.tenor-bass",
+      "spacing.upper",
+      "suspension.preparation-resolution",
+      "voice-leading-derived-harmony",
+      "voice.crossing",
+      "voice.overlap"
+    ],
+    "intervalLeadingRuleIds": [
+      "parallel.unison",
+      "parallel.fifth",
+      "parallel.octave",
+      "hidden.outer-fifth",
+      "hidden.outer-octave",
+      "melodic.large-leap",
+      "melodic.augmented",
+      "melodic.leap-compensation",
+      "cadence.basic",
+      "augmented-sixth.contrary-resolution",
+      "linear-chromaticism.resolution",
+      "contrary-motion.structure",
+      "cadence.voice-leading-confirmation"
+    ],
+    "hardDiagnosticRuleIds": [
+      "range.voice",
+      "voice.crossing",
+      "parallel.unison",
+      "parallel.fifth",
+      "parallel.octave"
+    ],
+    "profileEnabledRuleIds": [
+      "range.voice",
+      "spacing.upper",
+      "spacing.tenor-bass",
+      "voice.crossing",
+      "voice.overlap",
+      "parallel.unison",
+      "parallel.fifth",
+      "parallel.octave",
+      "hidden.outer-fifth",
+      "hidden.outer-octave",
+      "melodic.large-leap",
+      "melodic.augmented",
+      "melodic.leap-compensation",
+      "melodic.repetition",
+      "harmony.triad",
+      "harmony.incomplete",
+      "harmony.tendency-doubling",
+      "cadence.basic",
+      "dissonance.non-chord-tone"
+    ]
+  },
+  "ruleApplicationModel": {
+    "executableEntryPoint": "evaluateRules31(score, profile, rules = standardRules31)",
+    "contextConstruction": [
+      "createTimeline31(score) builds vertical slices from note onsets.",
+      "createAdjacentMotions31(slices) builds adjacent-slice voice motions.",
+      "Each enabled rule evaluates the shared RuleContext and returns diagnostics.",
+      "Profile severityOverrides are applied after diagnostics are created."
+    ],
+    "diagnosticShape": {
+      "id": "string",
+      "ruleId": "string",
+      "ruleName": "string",
+      "category": "range | spacing | voice-leading | counterpoint | harmony | cadence | dissonance | doubling | notation",
+      "severity": "error | warning | style",
+      "message": "string",
+      "explanation": "string",
+      "suggestion": "string",
+      "onset": "number | undefined",
+      "voices": "string[]",
+      "noteIds": "string[]"
+    },
+    "sourceFiles": [
+      "src/domain/rules/ruleEngine.ts",
+      "src/domain/rules/Rule.ts",
+      "src/domain/rules/timeline31.ts"
+    ]
+  },
+  "intervalLeadingRules31": {
+    "nativeIntervalAuthority": {
+      "unisonOrOctavePitchClassDistance": 0,
+      "perfectFifthPitchClassDistance": 18,
+      "perfectFourthPitchClassDistance": 13,
+      "majorThirdPitchClassDistance": 10,
+      "minorThirdPitchClassDistance": 8,
+      "basicIntervalClassifier": {
+        "0": "unison, or octave when absolute motion is nonzero and 0 mod 31",
+        "1": "half-sharp-step",
+        "5": "diatonic-step",
+        "8": "minor-third",
+        "10": "major-third",
+        "13": "fourth",
+        "18": "fifth"
+      },
+      "consonantTriadIntervals": [
+        0,
+        8,
+        10,
+        13,
+        18
+      ],
+      "sourceFiles": [
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/tuning31/interval31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/AUDIT.md"
+      ]
+    },
+    "implementedIntervalDrivenRules": [
+      {
+        "id": "perfect-interval-classification31",
+        "status": "implemented-helper",
+        "sourceFunction": "classifyPerfectVerticalInterval31",
+        "definitions": {
+          "unison": "pitch-class distance 0 and absolute vertical interval 0",
+          "octave": "pitch-class distance 0 and nonzero absolute vertical interval",
+          "fifth": "pitch-class distance 18"
+        },
+        "consumedByRuleIds": [
+          "parallel.unison",
+          "parallel.fifth",
+          "parallel.octave",
+          "hidden.outer-fifth",
+          "hidden.outer-octave"
+        ],
+        "consumedByHarmoniser": "getParallelPerfectPenalty31 adds 1200 when a same-kind perfect interval is reached by same-direction nonzero motion.",
+        "sourceFiles": [
+          "src/domain/rules/intervalLogic31.ts",
+          "src/domain/rules/standardRules31.ts",
+          "src/domain/harmoniser/harmoniseSatb.ts"
+        ]
+      },
+      {
+        "id": "basic-melodic-interval-classification31",
+        "status": "implemented-helper",
+        "sourceFunction": "classifyBasicInterval31",
+        "definitions": {
+          "0": "unison, or octave when absolute motion is nonzero and 0 mod 31",
+          "1": "half-sharp-step",
+          "5": "diatonic-step",
+          "8": "minor-third",
+          "10": "major-third",
+          "13": "fourth",
+          "18": "fifth"
+        },
+        "additionalReturnValues": {
+          "octave": "absolute motion is nonzero and 0 mod 31",
+          "compound": "absolute motion is greater than 31 and not octave-equivalent",
+          "unclassified": "any other native 31-EDO interval not in the basic first-pass set"
+        },
+        "consumedByRuleIds": [
+          "melodic.augmented"
+        ],
+        "sourceFiles": [
+          "src/domain/tuning31/interval31.ts",
+          "src/domain/rules/standardRules31.ts",
+          "src/tests/interval31.test.ts"
+        ]
+      },
+      {
+        "id": "parallel-perfect-leading31",
+        "status": "implemented-rule-family",
+        "ruleIds": [
+          "parallel.unison",
+          "parallel.fifth",
+          "parallel.octave"
+        ],
+        "trigger": "Any ordered SATB voice pair moves by nonzero same-direction motion from one same-kind perfect vertical interval to another.",
+        "intervalKinds31": [
+          "unison",
+          "fifth",
+          "octave"
+        ],
+        "sourceFiles": [
+          "src/domain/rules/standardRules31.ts",
+          "src/domain/rules/intervalLogic31.ts"
+        ]
+      },
+      {
+        "id": "hidden-direct-perfect-leading31",
+        "status": "implemented-rule-family",
+        "ruleIds": [
+          "hidden.outer-fifth",
+          "hidden.outer-octave"
+        ],
+        "trigger": "Soprano and bass move by nonzero similar motion into a perfect fifth or octave while the soprano moves by more than 5 native steps.",
+        "intervalKinds31": [
+          "fifth",
+          "octave"
+        ],
+        "sourceFiles": [
+          "src/domain/rules/standardRules31.ts"
+        ]
+      },
+      {
+        "id": "melodic-leap-leading31",
+        "status": "implemented-rule-family",
+        "ruleIds": [
+          "melodic.large-leap",
+          "melodic.leap-compensation"
+        ],
+        "trigger": "A melodic motion larger than 18 native steps is flagged, and a following same-direction continuation is flagged as uncompensated.",
+        "sourceFiles": [
+          "src/domain/rules/standardRules31.ts"
+        ]
+      },
+      {
+        "id": "cadential-outer-interval-leading31",
+        "status": "implemented-rule",
+        "ruleIds": [
+          "cadence.basic"
+        ],
+        "trigger": "The final soprano-bass pitch-class distance is 0, 10, or 18 after at least two slices exist.",
+        "stableOuterVoiceDistances31": [
+          0,
+          10,
+          18
+        ],
+        "sourceFiles": [
+          "src/domain/rules/standardRules31.ts",
+          "src/domain/harmoniser/harmoniseSatb.ts"
+        ]
+      }
+    ],
+    "mentionedIntervalDrivenRules": [
+      {
+        "id": "augmented-sixth.contrary-resolution",
+        "intervalBasis": "expanded sixth resolving by contrary motion",
+        "status": "mentioned-only",
+        "sourceFiles": [
+          "data/chord_types.csv",
+          "data/modulation_types.csv"
+        ]
+      },
+      {
+        "id": "seventh.preparation-resolution",
+        "intervalBasis": "seventh above bass or root treated as prepared or accented dissonance requiring contextual resolution",
+        "status": "mentioned-only",
+        "sourceFiles": [
+          "data/chord_types.csv"
+        ]
+      },
+      {
+        "id": "key-relation.intervallic-basis",
+        "intervalBasis": "relative, fifth, mediant, chromatic-mediant, submediant, and tonal-return relations are mentioned as intervallic research categories, not executable app rules.",
+        "status": "mentioned-only",
+        "mentionedRelations": [
+          {
+            "id": "KEY-001",
+            "intervallicRelation": "minor third between tonics"
+          },
+          {
+            "id": "KEY-003",
+            "intervallicRelation": "perfect fifth"
+          },
+          {
+            "id": "KEY-004",
+            "intervallicRelation": "major or minor third"
+          },
+          {
+            "id": "KEY-005",
+            "intervallicRelation": "major or minor third"
+          },
+          {
+            "id": "KEY-006",
+            "intervallicRelation": "major or minor sixth or inverse third"
+          },
+          {
+            "id": "KEY-008",
+            "intervallicRelation": "unison or octave return"
+          }
+        ],
+        "sourceFiles": [
+          "data/key_relations.csv",
+          "docs/generated_tables.md",
+          "docs/report.md"
+        ]
+      }
+    ]
+  },
+  "rules": [
+    {
+      "id": "range.voice",
+      "name": "SATB voice ranges",
+      "status": "implemented",
+      "category": "range",
+      "scope": "vertical",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Every sounding note must stay within the configured range for its SATB voice.",
+      "trigger": "A note's absoluteStep31 is lower than the active voice range low step or higher than the active voice range high step.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "profileInputs": [
+        "voiceRangeOverrides"
+      ],
+      "defaultRanges": {
+        "S": "C4-G5",
+        "A": "G3-D5",
+        "T": "C3-G4",
+        "B": "E2-C4"
+      },
+      "diagnosticSuggestion": "Move the note into the voice range or choose a different voice/register.",
+      "harmoniserUse": "Candidate voicing generation only creates notes inside src/data/voiceRanges.json ranges; final diagnostics also reject out-of-range notes as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/data/voiceRanges31.ts",
+        "src/data/voiceRanges.json",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts",
+        "src/tests/harmoniser31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "spacing.upper",
+      "name": "Upper-voice spacing",
+      "status": "implemented",
+      "category": "spacing",
+      "scope": "vertical",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "Adjacent upper voices should not exceed the profile's configured maximum spacing.",
+      "trigger": "The S-A span or A-T span, measured as upper absoluteStep31 minus lower absoluteStep31, is greater than the profile threshold.",
+      "voicesChecked": [
+        [
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "T"
+        ]
+      ],
+      "profileInputs": [
+        "spacingThresholds31.sopranoAltoMax",
+        "spacingThresholds31.altoTenorMax"
+      ],
+      "thresholdsByProfile31": {
+        "strictCounterpoint": {
+          "sopranoAltoMax": 31,
+          "altoTenorMax": 31
+        },
+        "commonPracticeSatb": {
+          "sopranoAltoMax": 31,
+          "altoTenorMax": 31
+        },
+        "nineteenthCenturyExpanded": {
+          "sopranoAltoMax": 36,
+          "altoTenorMax": 36
+        },
+        "customRevisionist31": {
+          "sopranoAltoMax": 43,
+          "altoTenorMax": 43
+        }
+      },
+      "diagnosticSuggestion": "Bring the upper voices closer together or redistribute the chord tones.",
+      "harmoniserUse": "Candidate voicings with S-A or A-T spacing above 31 steps are rejected before search; smaller spacing discomfort adds cost above 18 steps.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "spacing.tenor-bass",
+      "name": "Tenor-bass spacing",
+      "status": "implemented",
+      "category": "spacing",
+      "scope": "vertical",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Tenor and bass may be wider than the upper voices, but a very wide T-B span is flagged as stylistic risk.",
+      "trigger": "The T-B span, measured as tenor absoluteStep31 minus bass absoluteStep31, is greater than the profile threshold.",
+      "voicesChecked": [
+        [
+          "T",
+          "B"
+        ]
+      ],
+      "profileInputs": [
+        "spacingThresholds31.tenorBassMax"
+      ],
+      "thresholdsByProfile31": {
+        "strictCounterpoint": 43,
+        "commonPracticeSatb": 43,
+        "nineteenthCenturyExpanded": 48,
+        "customRevisionist31": 55
+      },
+      "diagnosticSuggestion": "Consider a closer tenor position unless this is a deliberate open voicing.",
+      "harmoniserUse": "Candidate voicings with T-B spacing above 48 steps are rejected before search; smaller T-B spacing discomfort adds cost above 31 steps.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "voice.crossing",
+      "name": "No voice crossing",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "vertical",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "SATB vertical order should keep soprano above alto, alto above tenor, and tenor above bass.",
+      "trigger": "For any adjacent SATB pair, the upper voice absoluteStep31 is lower than the lower voice absoluteStep31.",
+      "voicesChecked": [
+        [
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "T"
+        ],
+        [
+          "T",
+          "B"
+        ]
+      ],
+      "diagnosticSuggestion": "Move one of the voices back into normal vertical order.",
+      "harmoniserUse": "Candidate voicings are rejected unless S >= A >= T >= B in absoluteStep31; final diagnostics treat crossings as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "voice.overlap",
+      "name": "No voice overlap",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "An adjacent voice should not move beyond the previous register of its neighbor between two sonorities.",
+      "trigger": "For adjacent voices, upperTo is below lowerFrom, or lowerTo is above upperFrom.",
+      "voicesChecked": [
+        [
+          "S",
+          "A"
+        ],
+        [
+          "A",
+          "T"
+        ],
+        [
+          "T",
+          "B"
+        ]
+      ],
+      "diagnosticSuggestion": "Use smaller motion or revoice the destination chord.",
+      "harmoniserUse": "Final diagnostics score overlaps as warnings; overlap cost is included through diagnosticCost when ranking generated solutions.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md",
+        "README.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "parallel.unison",
+      "name": "No parallel unisons",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Two voices should not move in the same nonzero direction from one exact unison to another exact unison.",
+      "trigger": "Any ordered voice pair has nonzero same-direction motion and the previous and current vertical intervals both classify as unison.",
+      "voicesChecked": "all ordered SATB voice pairs",
+      "perfectIntervalDefinition31": "Unison is pitch-class distance 0 with absolute vertical interval 0.",
+      "diagnosticSuggestion": "Use contrary or oblique motion, or change one chord tone.",
+      "harmoniserUse": "Final diagnostics treat parallel unisons as hard errors; search-time parallel perfect penalty also catches same-kind perfect intervals.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "parallel.fifth",
+      "name": "No parallel perfect fifths",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Two voices should not move in the same nonzero direction from one perfect fifth to another perfect fifth.",
+      "trigger": "Any ordered voice pair has nonzero same-direction motion and the previous and current vertical intervals both classify as fifth.",
+      "voicesChecked": "all ordered SATB voice pairs",
+      "perfectIntervalDefinition31": "Perfect fifth is native 31-EDO pitch-class distance 18.",
+      "diagnosticSuggestion": "Use contrary or oblique motion, or change one chord tone.",
+      "harmoniserUse": "The harmoniser adds a 1200 search penalty for parallel perfect intervals and final diagnostics treat parallel fifths as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "parallel.octave",
+      "name": "No parallel octaves",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "error",
+      "hardDiagnostic": true,
+      "definition": "Two voices should not move in the same nonzero direction from one octave to another octave.",
+      "trigger": "Any ordered voice pair has nonzero same-direction motion and the previous and current vertical intervals both classify as octave.",
+      "voicesChecked": "all ordered SATB voice pairs",
+      "perfectIntervalDefinition31": "Octave is native 31-EDO pitch-class distance 0 with nonzero absolute vertical interval.",
+      "diagnosticSuggestion": "Use contrary or oblique motion, or change one chord tone.",
+      "harmoniserUse": "The harmoniser adds a 1200 search penalty for parallel perfect intervals and final diagnostics treat parallel octaves as hard errors.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/intervalLogic31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "hidden.outer-fifth",
+      "name": "Hidden/direct fifths in outer voices",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "The outer voices should not approach a perfect fifth by similar motion when the soprano leaps.",
+      "trigger": "Soprano and bass both move in the same nonzero direction, soprano motion is greater than 5 native steps, and the destination S-B interval classifies as a perfect fifth.",
+      "voicesChecked": [
+        [
+          "S",
+          "B"
+        ]
+      ],
+      "perfectIntervalDefinition31": "Perfect fifth is native 31-EDO pitch-class distance 18.",
+      "profileSeverityOverrides": {
+        "nineteenthCenturyExpanded": "style"
+      },
+      "diagnosticSuggestion": "Approach the perfect interval by contrary motion or stepwise soprano motion.",
+      "harmoniserUse": "Final diagnostics score hidden/direct fifths as warnings or style notices depending on profile.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "hidden.outer-octave",
+      "name": "Hidden/direct octaves in outer voices",
+      "status": "implemented",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "The outer voices should not approach an octave by similar motion when the soprano leaps.",
+      "trigger": "Soprano and bass both move in the same nonzero direction, soprano motion is greater than 5 native steps, and the destination S-B interval classifies as an octave.",
+      "voicesChecked": [
+        [
+          "S",
+          "B"
+        ]
+      ],
+      "perfectIntervalDefinition31": "Octave is native 31-EDO pitch-class distance 0 with nonzero absolute vertical interval.",
+      "profileSeverityOverrides": {
+        "nineteenthCenturyExpanded": "style"
+      },
+      "diagnosticSuggestion": "Approach the perfect interval by contrary motion or stepwise soprano motion.",
+      "harmoniserUse": "Final diagnostics score hidden/direct octaves as warnings or style notices depending on profile.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "melodic.large-leap",
+      "name": "Large melodic leap",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "A single voice should avoid very large melodic leaps unless justified and compensated.",
+      "trigger": "Any voice moves by more than 18 native 31-EDO steps between adjacent slices.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "profileSeverityOverrides": {
+        "strictCounterpoint": "error"
+      },
+      "diagnosticSuggestion": "Prefer stepwise motion or compensate the leap in the opposite direction.",
+      "harmoniserUse": "Final diagnostics add cost for large leaps; search-time smoothness cost also penalizes large motion in every voice.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "melodic.augmented",
+      "name": "Augmented melodic interval",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Altered or augmented melodic intervals are stylistically flagged for review.",
+      "trigger": "Any voice moves by at least 6 native steps and classifyBasicInterval31 returns unclassified.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "profileSeverityOverrides": {
+        "customRevisionist31": "style"
+      },
+      "diagnosticSuggestion": "Check whether the altered spelling and resolution are intentional.",
+      "harmoniserUse": "Final diagnostics add a style cost when this rule fires.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/tuning31/interval31.ts",
+        "docs/RULE_ENGINE.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "melodic.leap-compensation",
+      "name": "Leap compensation",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "A large leap is usually followed by motion in the opposite direction.",
+      "trigger": "A voice makes a previous motion greater than 18 native steps, then continues in the same nonzero direction on the next motion.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "diagnosticSuggestion": "Move the following note back by step if possible.",
+      "harmoniserUse": "Final diagnostics add a style cost when this rule fires.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "melodic.repetition",
+      "name": "Repeated-note stagnation",
+      "status": "implemented",
+      "category": "counterpoint",
+      "scope": "horizontal",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Long repeated-note runs can make a line feel static.",
+      "trigger": "A voice reaches four consecutive sounding notes with the same absoluteStep31.",
+      "voicesChecked": [
+        "S",
+        "A",
+        "T",
+        "B"
+      ],
+      "diagnosticSuggestion": "Consider stepwise motion or a neighboring figure.",
+      "harmoniserUse": "Final diagnostics add a style cost when this rule fires.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "harmony.triad",
+      "name": "Triad classification",
+      "status": "implemented",
+      "category": "harmony",
+      "scope": "vertical",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Classify stable three-or-more-note sonorities as native 31-EDO triads when confidence is high enough.",
+      "trigger": "A vertical slice has at least three sounding notes and classifySonority31 returns a chord with confidence at least 0.65.",
+      "permittedChordKinds31": {
+        "major-triad": [
+          0,
+          10,
+          18
+        ],
+        "minor-triad": [
+          0,
+          8,
+          18
+        ],
+        "diminished-triad": [
+          0,
+          8,
+          16
+        ],
+        "augmented-triad": [
+          0,
+          10,
+          20
+        ]
+      },
+      "diagnosticSuggestion": "Use this as harmonic context for spacing, doubling, and dissonance checks.",
+      "harmoniserUse": "Candidate chords use the profile's permittedChordVocabulary; final diagnostics can classify resulting sonorities.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmony/chord31.ts",
+        "src/domain/harmony/sonorityClassifier.ts",
+        "src/domain/harmoniser/candidateChords.ts",
+        "docs/RULE_ENGINE.md",
+        "src/tests/ruleEngine31.test.ts"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "harmony.incomplete",
+      "name": "Incomplete chord",
+      "status": "implemented",
+      "category": "harmony",
+      "scope": "vertical",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Flag a classified chord that appears to omit one or more expected chord tones.",
+      "trigger": "A vertical slice has at least three sounding notes, classifySonority31 returns a chord, and missingSteps31 is nonempty.",
+      "diagnosticSuggestion": "Check whether the omission is intended or caused by doubling.",
+      "harmoniserUse": "Final diagnostics add a style cost for incomplete sonorities.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "harmony.tendency-doubling",
+      "name": "Doubled tendency tone",
+      "status": "implemented",
+      "category": "doubling",
+      "scope": "vertical",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "Likely tendency pitch classes should normally not be doubled.",
+      "trigger": "A vertical sonority doubles native pitch-class step 12, 17, 27, or 30.",
+      "likelyTendencyPitchClasses31": [
+        12,
+        17,
+        27,
+        30
+      ],
+      "profileSeverityOverrides": {
+        "nineteenthCenturyExpanded": "style"
+      },
+      "diagnosticSuggestion": "Prefer doubling the root or a stable chord tone unless the tendency tone treatment is deliberate.",
+      "harmoniserUse": "Final diagnostics add warning or style cost; candidate voicing generation separately gives a small cost when the root is not doubled.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/harmoniser/candidateVoicings.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "data/chord_types.csv",
+        "data/modulation_types.csv"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "cadence.basic",
+      "name": "Basic cadence detection",
+      "status": "implemented",
+      "category": "cadence",
+      "scope": "phrase",
+      "defaultSeverity": "style",
+      "hardDiagnostic": false,
+      "definition": "Identify a final outer-voice sonority that is stable enough to be a basic cadence candidate.",
+      "trigger": "The last slice and previous slice exist, the last bass and soprano sound, and the final soprano-bass pitch-class distance is 0, 10, or 18.",
+      "stableOuterVoiceDistances31": [
+        0,
+        10,
+        18
+      ],
+      "diagnosticSuggestion": "A future key-aware cadence pass can refine this label.",
+      "harmoniserUse": "Generated solutions receive a small cadence score bonus when the final S-B pitch-class distance is 0, 10, or 18.",
+      "limitations": [
+        "Not key-aware",
+        "Not phrase-aware beyond checking the final slice"
+      ],
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "data/cadence_types.csv"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "dissonance.non-chord-tone",
+      "name": "Non-chord tone candidate",
+      "status": "implemented",
+      "category": "dissonance",
+      "scope": "vertical",
+      "defaultSeverity": "warning",
+      "hardDiagnostic": false,
+      "definition": "Flag a note that does not belong to the best first-pass chord classification for a four-or-more-note sonority.",
+      "trigger": "A vertical slice has at least four sounding notes, classifySonority31 returns a chord, and nonChordNotes is nonempty.",
+      "profileSeverityOverrides": {
+        "strictCounterpoint": "error",
+        "customRevisionist31": "style"
+      },
+      "relatedDissonanceTypesMentioned": [
+        "passing tone",
+        "neighbor tone",
+        "suspension",
+        "appoggiatura"
+      ],
+      "diagnosticSuggestion": "Check whether it behaves as a passing tone, neighbor tone, suspension, or appoggiatura.",
+      "harmoniserUse": "Final diagnostics add error, warning, or style cost depending on profile.",
+      "limitations": [
+        "Heuristic only",
+        "Does not yet classify preparation, accent, duration, or resolution",
+        "Does not yet consume allowedDissonanceTypes to permit or reject a specific dissonance type"
+      ],
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "data/chord_types.csv",
+        "docs/theoretical_framework.md"
+      ],
+      "catalogueGroup": "implementedRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "suspension.preparation-resolution",
+      "name": "Suspension preparation and resolution",
+      "status": "deferred",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in profiles",
+        "future rule family",
+        "suspension-based sonority",
+        "voice-leading-derived harmony"
+      ],
+      "expectedRuleIdea": "A suspension should be prepared as a consonance or retained tone, form a dissonance, and resolve according to its contrapuntal context.",
+      "currentImplementation": "src/domain/rules/standardRules31.ts exports suspensionRules as an empty array.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/RULE_ENGINE.md",
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "retardation.resolution",
+      "name": "Retardation resolution",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "suspension-based sonority related process"
+      ],
+      "expectedRuleIdea": "A retardation should be analyzed through preparation, dissonant delay, and resolution in the affected voice.",
+      "currentImplementation": "No executable retardation evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "passing-tone.license",
+      "name": "Passing tone treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in profiles",
+        "non-chord-tone diagnostic suggestion",
+        "voice-leading priority topic"
+      ],
+      "expectedRuleIdea": "A passing tone should be understood as linear stepwise motion between chord tones, with accent and duration affecting severity.",
+      "currentImplementation": "Non-chord-tone candidates may suggest passing-tone interpretation, but no dedicated passing-tone classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/rules/standardRules31.ts",
+        "docs/theoretical_framework.md",
+        "docs/RULE_ENGINE.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "neighbor-tone.license",
+      "name": "Neighbor tone treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in profiles",
+        "non-chord-tone diagnostic suggestion",
+        "melodic repetition suggestion"
+      ],
+      "expectedRuleIdea": "A neighbor tone should leave and return to a stable pitch by local stepwise motion, with altered-neighbor variants allowed in expanded profiles.",
+      "currentImplementation": "No dedicated neighbor-tone classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/rules/standardRules31.ts",
+        "docs/theoretical_framework.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "accented-passing.license",
+      "name": "Accented passing tone treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in commonPracticeSatb"
+      ],
+      "expectedRuleIdea": "An accented passing tone should be judged by metrical accent, linear motion, and resolution.",
+      "currentImplementation": "No metrical accent dissonance classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "docs/theoretical_framework.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "altered-neighbor.license",
+      "name": "Altered neighbor treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in nineteenthCenturyExpanded"
+      ],
+      "expectedRuleIdea": "An altered neighbor should preserve spelling-sensitive 31-EDO identity and resolve intentionally.",
+      "currentImplementation": "No dedicated altered-neighbor classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "appoggiatura.resolution",
+      "name": "Appoggiatura resolution",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "allowed dissonance type in nineteenthCenturyExpanded",
+        "non-chord-tone diagnostic suggestion",
+        "appoggiatura chord vocabulary item",
+        "voice-leading priority topic"
+      ],
+      "expectedRuleIdea": "An appoggiatura should be treated as an accented dissonance resolving by step, not as an autonomous chord by default.",
+      "currentImplementation": "No dedicated appoggiatura classifier exists.",
+      "sourceFiles": [
+        "src/domain/rules/ruleProfiles31.ts",
+        "src/domain/rules/standardRules31.ts",
+        "data/chord_types.csv",
+        "docs/theoretical_framework.md",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "accented-dissonance.treatment",
+      "name": "Accented dissonance treatment",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "appoggiatura and seventh-chord context"
+      ],
+      "expectedRuleIdea": "Accented dissonances should be evaluated by accent, duration, preparation, and resolution.",
+      "currentImplementation": "No accent-aware dissonance evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "seventh.preparation-resolution",
+      "name": "Seventh preparation and resolution",
+      "status": "mentioned-only",
+      "category": "dissonance",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "diatonic seventh chord historical interpretation"
+      ],
+      "expectedRuleIdea": "A seventh should be checked as a prepared or accented dissonance requiring contextual resolution unless the style supports another treatment.",
+      "currentImplementation": "No dedicated seventh preparation/resolution evaluator exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": false,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "augmented-sixth.contrary-resolution",
+      "name": "Augmented sixth contrary-motion resolution",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "augmented sixth sonority vocabulary item",
+        "augmented sixth reinterpretation modulation topic"
+      ],
+      "expectedRuleIdea": "An expanded sixth sonority often resolves by contrary motion and must preserve exact spelling and resolution evidence.",
+      "currentImplementation": "No dedicated augmented-sixth detection or resolution evaluator exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "data/modulation_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "common-tone.continuity",
+      "name": "Common-tone continuity",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "common-tone sonority",
+        "common-tone procedures",
+        "abrupt tonal shift continuity"
+      ],
+      "expectedRuleIdea": "Retained tones should be tracked through chromatic displacement, registral emphasis, or tonal redirection.",
+      "currentImplementation": "No dedicated common-tone continuity evaluator exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "data/modulation_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "enharmonic-reinterpretation.spelling-sensitive-resolution",
+      "name": "Enharmonic reinterpretation and spelling-sensitive resolution",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "enharmonically reinterpreted chord",
+        "enharmonic modulation",
+        "diminished seventh reinterpretation",
+        "tendency-tone reinterpretation"
+      ],
+      "expectedRuleIdea": "Changed spelling or resolution should be tracked without collapsing enharmonic spellings into an equal-tempered pitch-class set.",
+      "currentImplementation": "The pitch model preserves spelling, but no dedicated enharmonic reinterpretation rule exists.",
+      "sourceFiles": [
+        "data/chord_types.csv",
+        "data/modulation_types.csv",
+        "docs/theoretical_framework.md",
+        "docs/report.md",
+        "docs/generated_tables.md",
+        "README.md",
+        "AGENTS.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    },
+    {
+      "id": "linear-chromaticism.resolution",
+      "name": "Linear chromaticism and altered-note resolution",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "chromatic embellishment",
+        "chromatic pivot modulation"
+      ],
+      "expectedRuleIdea": "Altered notes should be checked for spelling, source notation, tendency, and resolution in the affected voice.",
+      "currentImplementation": "The melodic.augmented rule flags altered or unclassified intervals, but no full linear-chromaticism evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/modulation_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md",
+        "src/domain/rules/standardRules31.ts"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "contrary-motion.structure",
+      "name": "Contrary-motion structures",
+      "status": "mentioned-only",
+      "category": "voice-leading",
+      "scope": "horizontal",
+      "mentionedAs": [
+        "voice-leading priority topic",
+        "augmented sixth resolution topic",
+        "hidden perfect workaround suggestion"
+      ],
+      "expectedRuleIdea": "Contrary motion should be recognized as a preferred approach to some perfect intervals and expanded-sixth resolutions.",
+      "currentImplementation": "Contrary motion is only indirectly favored because parallel-perfect and hidden-perfect rules require same or similar motion to trigger.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "src/domain/rules/standardRules31.ts",
+        "data/chord_types.csv",
+        "data/modulation_types.csv"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "cadence.voice-leading-confirmation",
+      "name": "Cadential voice-leading confirmation",
+      "status": "partly-implemented",
+      "category": "cadence",
+      "scope": "phrase",
+      "mentionedAs": [
+        "authentic cadence upper-voice resolution",
+        "deceptive cadence expected resolution",
+        "evaded cadence altered resolution",
+        "expanded cadence suspensions and bass prolongation"
+      ],
+      "expectedRuleIdea": "Cadences should be evaluated by bass motion, upper-voice resolution, phrase context, expected and actual resolution, and possible evasion or weakening.",
+      "currentImplementation": "cadence.basic only checks final outer-voice stability by pitch-class distance 0, 10, or 18 and is not key-aware.",
+      "sourceFiles": [
+        "src/domain/rules/standardRules31.ts",
+        "src/domain/harmoniser/harmoniseSatb.ts",
+        "data/cadence_types.csv",
+        "docs/RULE_ENGINE.md",
+        "docs/HARMONISER.md",
+        "docs/report.md",
+        "docs/generated_tables.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": true
+    },
+    {
+      "id": "voice-leading-derived-harmony",
+      "name": "Voice-leading-derived harmony before root-based labels",
+      "status": "mentioned-only",
+      "category": "harmony",
+      "scope": "global",
+      "mentionedAs": [
+        "historical analysis principle",
+        "linear chord",
+        "chromatic passing sonority"
+      ],
+      "expectedRuleIdea": "Many verticalities should be explained as the result of simultaneous linear motions before assigning autonomous chord identity.",
+      "currentImplementation": "harmony.triad and dissonance.non-chord-tone are first-pass heuristics; no full linear-chord evaluator exists.",
+      "sourceFiles": [
+        "docs/theoretical_framework.md",
+        "data/chord_types.csv",
+        "docs/report.md",
+        "docs/generated_tables.md",
+        "README.md"
+      ],
+      "catalogueGroup": "mentionedOrDeferredRules",
+      "isVoiceLeadingRelated": true,
+      "isIntervalLeadingRelated": false
+    }
+  ],
+  "extractionAudit": {
+    "analysedCodeAreas": [
+      "src/domain/rules",
+      "src/domain/harmoniser",
+      "src/domain/harmony",
+      "src/domain/tuning31",
+      "src/data/ruleProfiles",
+      "src/data/voiceRanges31.ts",
+      "src/tests"
+    ],
+    "analysedDocumentationAndData": [
+      "README.md",
+      "AGENTS.md",
+      "docs/RULE_ENGINE.md",
+      "docs/HARMONISER.md",
+      "docs/AUDIT.md",
+      "docs/ARCHITECTURE.md",
+      "docs/theoretical_framework.md",
+      "docs/generated_tables.md",
+      "docs/report.md",
+      "data/chord_types.csv",
+      "data/cadence_types.csv",
+      "data/modulation_types.csv",
+      "data/key_relations.csv"
+    ],
+    "exactRuleCountCheck": "19 implemented Rule objects are exported through standardRules31; suspensionRules is currently an empty exported array.",
+    "independentUseNote": "Consumers can read the top-level rules array for all catalogued rules, or implementedRules / mentionedOrDeferredRules for the original split."
+  }
+}
