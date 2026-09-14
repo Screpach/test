@@ -1,0 +1,71 @@
+name: Fughetta Build
+
+on:
+  push:
+    branches:
+      - chatgpt-fughetta-build-20260914
+    paths:
+      - "fughetta_build/**"
+      - ".github/workflows/fughetta-build.yml"
+
+permissions:
+  contents: read
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install LilyPond and audio renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lilypond fluidsynth fluid-soundfont-gm ffmpeg
+          lilypond --version | head -n 1
+          fluidsynth --version
+
+      - name: Compile score and MIDI from the same LilyPond source
+        working-directory: fughetta_build
+        run: |
+          set -euo pipefail
+          lilypond -dno-point-and-click fughetta_g_minor.ly 2>&1 | tee lilypond-build.log
+          test -s fughetta_g_minor.pdf
+          test -s fughetta_g_minor.midi
+
+      - name: Render MIDI with Acoustic Grand Piano SoundFont
+        working-directory: fughetta_build
+        run: |
+          set -euo pipefail
+          SF=$(find /usr/share/sounds/sf2 -type f \( -iname "*FluidR3_GM*.sf2" -o -iname "*fluid*.sf2" \) | head -n 1)
+          test -n "$SF"
+          echo "SoundFont: $SF" | tee audio-build.log
+          fluidsynth -ni "$SF" fughetta_g_minor.midi -F fughetta_g_minor.wav -r 44100 -g 0.50 2>&1 | tee -a audio-build.log
+          ffmpeg -y -hide_banner -loglevel warning -i fughetta_g_minor.wav -af "alimiter=limit=0.95" -codec:a libmp3lame -q:a 2 fughetta_g_minor.mp3
+          test -s fughetta_g_minor.mp3
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 fughetta_g_minor.mp3 | tee -a audio-build.log
+          rm fughetta_g_minor.wav
+
+      - name: Record checksums
+        working-directory: fughetta_build
+        run: |
+          sha256sum fughetta_g_minor.ly fughetta_g_minor.pdf fughetta_g_minor.midi fughetta_g_minor.mp3 > SHA256SUMS.txt
+
+      - name: Upload deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: fughetta-g-minor-deliverables
+          path: |
+            fughetta_build/fughetta_g_minor.ly
+            fughetta_build/fughetta_g_minor.pdf
+            fughetta_build/fughetta_g_minor.midi
+            fughetta_build/fughetta_g_minor.mp3
+            fughetta_build/lilypond-build.log
+            fughetta_build/audio-build.log
+            fughetta_build/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 7
